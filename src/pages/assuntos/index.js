@@ -1,5 +1,6 @@
 import {
   Alert,
+  Breadcrumbs,
   Button,
   IconButton,
   InputAdornment,
@@ -9,15 +10,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Box, useTheme } from "@mui/system";
+import { Box, Stack, useTheme } from "@mui/system";
 import { useEffect, useState } from "react";
-import { AddOutlined, Clear, Search } from "@mui/icons-material";
+import {
+  AddOutlined,
+  Clear,
+  LibraryBooksOutlined,
+  Search,
+} from "@mui/icons-material";
 import useStyles from "./styles";
-
 import { useParams } from "react-router-dom";
 import AddAssunto from "../../components/addAssunto";
 import AssuntoComponent from "../../components/assuntoComponent";
-import { extrairDisciplinas } from "../../utils/functions";
+import {
+  encontrarConcursoPorDisciplina,
+  extrairDisciplinas,
+} from "../../utils/functions";
 
 export default function Assuntos() {
   const theme = useTheme();
@@ -30,7 +38,7 @@ export default function Assuntos() {
   const [concursos, setConcursos] = useState([]);
   const [snackbar, setSnackbar] = useState(null);
   const [open, setOpen] = useState(false);
-
+  const [concursoName, setConcursoName] = useState("");
   const { id } = useParams();
   useEffect(() => {
     const storedConcursos = JSON.parse(localStorage.getItem("concursos"));
@@ -40,6 +48,12 @@ export default function Assuntos() {
     setAssuntos(disciplina?.assuntos || []);
     setDisciplina(disciplina);
   }, [id]);
+
+  useEffect(() => {
+    const concursoId = encontrarConcursoPorDisciplina(concursos, id);
+    const concurso = concursos?.find((item) => item?.id === concursoId);
+    setConcursoName(concurso?.concurso);
+  }, [assuntos]);
 
   const filteredRows = assuntos?.filter((row, index) => {
     row.numero = index;
@@ -54,9 +68,42 @@ export default function Assuntos() {
     setCurrentPage(page);
   };
 
+  const truncateText = (text, maxLength = 20) => {
+    if (!text) return "";
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
+  };
+  const breadcrumbs = [
+    <IconButton
+      key="home"
+      href="/"
+      sx={{
+        color: "text.primary",
+        textDecoration: "none",
+        display: "flex",
+        alignItems: "center",
+        "&:hover": { textDecoration: "underline" },
+      }}
+    >
+      <LibraryBooksOutlined fontSize="small" />
+    </IconButton>,
+    <Typography key="concurso" sx={{ color: "text.primary" }}>
+      {truncateText(concursoName)}
+    </Typography>,
+    <Typography key="disciplina" sx={{ color: "text.primary" }}>
+      {truncateText(disciplina?.disciplina)}
+    </Typography>,
+  ];
+
   return (
     <>
       <Box sx={styles.containerLayout}>
+        <Stack spacing={2} sx={{ margin: "0 0 20px 0" }}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb">
+            {breadcrumbs}
+          </Breadcrumbs>
+        </Stack>
         <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
           <Typography variant="title">{disciplina?.disciplina}</Typography>
         </Box>

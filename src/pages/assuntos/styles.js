@@ -3,7 +3,7 @@ const styles = (theme) => ({
     width: "100%",
     height: "30px",
     maxWidth: "1000px",
-    margin: "50px auto",
+    margin: "25px auto",
     padding: "20px",
   },
   containerPaper: {

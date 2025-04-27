@@ -70,6 +70,13 @@ const styles = (theme) => ({
     marginTop: "20px",
     width: "100%",
   },
+  textAtividade: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: "200px", // Adjust the width as needed
+    display: "inline-block",
+  },
   dataGrid: {
     display: "grid",
     "&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell": {

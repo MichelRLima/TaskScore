@@ -95,13 +95,14 @@ export default function AssuntoComponent(params) {
     return atividades
       .map((item) => ({
         Data: dayjs(item.date).format("DD/MM/YYYY"),
-        DataOriginal: item.date, // vou guardar a original pra usar no Tooltip se quiser depois
+        DataOriginal: item.date, // guardando a original pra usar no Tooltip se quiser depois
         Total: Number(item.totalQuestoes),
         Acertos: Number(item.totalAcertos),
         Erros: Number(item.totalQuestoes) - Number(item.totalAcertos),
+        Nome: item.nomeAtividade,
       }))
-      .sort((a, b) => new Date(b.DataOriginal) - new Date(a.DataOriginal)) // ordenar por data (mais recente primeiro)
-      .slice(0, 30); // pegar apenas os 30 mais recentes
+      .sort((a, b) => new Date(a.DataOriginal) - new Date(b.DataOriginal)) // ordenar da mais antiga para a mais recente
+      .slice(0, 30);
   };
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -110,26 +111,33 @@ export default function AssuntoComponent(params) {
       const acertos = payload.find((p) => p.name === "Acertos")?.value || 0;
       const erros = payload.find((p) => p.name === "Erros")?.value || 0;
       const totalQuestoes = acertos + erros;
+      const atividade = payload?.[0]?.payload?.Nome || "";
 
       return (
-        <Paper
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
+        <Box
+          sx={{
+            border: "1px solid",
+            borderColor: "divider",
+            padding: 2,
+            borderRadius: 1,
+            backgroundColor: "background.paper",
           }}
         >
-          {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }}>
-              {entry.name}: {entry.value}
-            </p>
-          ))}
-          <p>
-            <strong>Total:</strong> {totalQuestoes}
-          </p>
-          <p>
+          <Typography variant="body2">
             <strong>Data:</strong> {label}
-          </p>
-        </Paper>
+          </Typography>
+          <Typography variant="body2" sx={styles.textAtividade}>
+            <strong>Atividade:</strong> {atividade}
+          </Typography>
+          {payload.map((entry, index) => (
+            <Typography key={index} variant="body2" sx={{ color: entry.color }}>
+              {entry.name}: {entry.value}
+            </Typography>
+          ))}
+          <Typography variant="body2">
+            <strong>Total:</strong> {totalQuestoes}
+          </Typography>
+        </Box>
       );
     }
 
@@ -245,32 +253,22 @@ export default function AssuntoComponent(params) {
     setLoadingDelete(true);
 
     const concursoId = encontrarConcursoPorDisciplina(concursos, disciplinaId);
-
     const concursosCopy = [...concursos];
-
     const concursoIndex = concursosCopy.findIndex((c) => c.id === concursoId);
     if (concursoIndex === -1) return concursos;
-
     const disciplinasCopy = [
       ...(concursosCopy[concursoIndex].disciplinas ?? []),
     ];
-
     const disciplinaIndex = disciplinasCopy.findIndex(
       (d) => d.id === disciplinaId
     );
     if (disciplinaIndex === -1) return concursos;
-
     const assuntosCopy = [...(disciplinasCopy[disciplinaIndex].assuntos ?? [])];
-
-    // Agora filtra para REMOVER o assunto com o ID recebido
     const updatedAssuntos = assuntosCopy.filter((assunto) => assunto.id !== id);
-
-    // Atualiza a disciplina com os novos assuntos
     disciplinasCopy[disciplinaIndex] = {
       ...disciplinasCopy[disciplinaIndex],
       assuntos: updatedAssuntos,
     };
-
     // Atualiza o concurso com as novas disciplinas
     concursosCopy[concursoIndex] = {
       ...concursosCopy[concursoIndex],
@@ -486,7 +484,7 @@ export default function AssuntoComponent(params) {
           </Box>
           <Paper
             variant="outlined"
-            sx={{ width: "100%", height: "300px", padding: 5 }}
+            sx={{ width: "100%", height: "300px", padding: 6 }}
           >
             <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
               Gráfico de desempenho

@@ -56,12 +56,6 @@ export default function Concursos() {
     currentPage * itemsPerPage
   );
 
-  // const [expandedAccordion, setExpandedAccordion] = useState(false);
-
-  // const handleAccordionChange = (panel) => (event, isExpanded) => {
-  //   setExpandedAccordion(isExpanded ? panel : false);
-  // };
-
   return (
     <Box sx={styles?.containerLayout}>
       <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
