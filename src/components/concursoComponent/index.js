@@ -33,7 +33,7 @@ import { useNavigate } from "react-router-dom";
 import EditDisciplina from "../editDisciplina";
 import ModalDelete from "../modalDelete";
 import EditConcurso from "../editConcurso";
-import { render } from "@testing-library/react";
+
 export default function ConcursoComponent(params) {
   const { concurso, setConcursos, allConcursos } = params;
   const [open, setOpen] = useState(false);
@@ -246,7 +246,7 @@ export default function ConcursoComponent(params) {
               pageSizeOptions={[10, 15, 20]}
               initialState={{
                 pagination: {
-                  paginationModel: { page: 1, pageSize: 10 },
+                  paginationModel: { pageSize: 10, page: 0 },
                 },
               }}
             />

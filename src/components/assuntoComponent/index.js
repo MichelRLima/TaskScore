@@ -477,7 +477,7 @@ export default function AssuntoComponent(params) {
               pageSizeOptions={[10, 15, 20]}
               initialState={{
                 pagination: {
-                  paginationModel: { page: 1, pageSize: 10 },
+                  paginationModel: { pageSize: 10, page: 0 },
                 },
               }}
             />

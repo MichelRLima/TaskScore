@@ -110,7 +110,7 @@ export default function Concursos() {
                 minHeight: "400px",
               }}
             >
-              {paginatedConcursos.map((concurso, key) => (
+              {paginatedConcursos?.map((concurso, key) => (
                 <ConcursoComponent
                   key={key}
                   concurso={concurso}
