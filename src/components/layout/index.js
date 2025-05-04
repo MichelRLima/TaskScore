@@ -5,7 +5,11 @@ import { Box } from "@mui/system";
 import MaterialUISwitch from "../buttonMode";
 
 import { useEffect, useState } from "react";
-import { LibraryBooksOutlined, QueryStatsOutlined } from "@mui/icons-material";
+import {
+  DashboardCustomizeOutlined,
+  LibraryBooksOutlined,
+  QueryStatsOutlined,
+} from "@mui/icons-material";
 export default function Layout(params) {
   const { setColorMode } = params;
   const theme = useTheme();
@@ -16,7 +20,7 @@ export default function Layout(params) {
     setValue(newValue);
   };
 
-  const pages = ["/", "/metricas"];
+  const pages = ["/", "/metricas", "/flashcards"];
 
   useEffect(() => {
     const pageName = window.location.pathname;
@@ -60,6 +64,13 @@ export default function Layout(params) {
             iconPosition="start"
             label="Metricas"
             onClick={() => navigate("/metricas")}
+          />
+          <Tab
+            sx={styles.tab}
+            icon={<DashboardCustomizeOutlined />}
+            iconPosition="start"
+            label="Flashcards"
+            onClick={() => navigate("/flashcards")}
           />
         </Tabs>
 

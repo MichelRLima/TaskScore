@@ -8,6 +8,7 @@ import Layout from "./components/layout";
 import Metricas from "./pages/metricas";
 import Concursos from "./pages/concursos";
 import Assuntos from "./pages/assuntos";
+import FlashCards from "./components/flashCards";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -33,6 +34,7 @@ function App() {
               <Route exact path="/" element={<Concursos />} />
               <Route path="/metricas" element={<Metricas />} />
               <Route path="/concurso/disciplina/:id" element={<Assuntos />} />
+              <Route path="/flashcards" element={<FlashCards />} />
             </Route>
           </Routes>
         </BrowserRouter>
