@@ -8,7 +8,7 @@ import Layout from "./components/layout";
 import Metricas from "./pages/metricas";
 import Concursos from "./pages/concursos";
 import Assuntos from "./pages/assuntos";
-import FlashCards from "./components/flashCards";
+import FlashCards from "./pages/flashCards";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");

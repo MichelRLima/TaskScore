@@ -11,6 +11,7 @@ const styles = (theme) => ({
 
     display: "flex",
     justifyContent: "space-between",
+    margin: "0 0 30px 0",
   },
   textFieldBuscar: {
     width: "100%",
@@ -21,6 +22,12 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.mode === "dark" && "transparent",
     minHeight: "400px",
     padding: "20px",
+  },
+  conatinerAcoesAccordion: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
   },
 });
 export default styles;

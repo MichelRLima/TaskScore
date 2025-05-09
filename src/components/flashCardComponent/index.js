@@ -1,6 +1,7 @@
 import { FlashcardArray } from "react-quizlet-flashcard";
 import { useRef, useState } from "react";
-import { Box } from "@mui/system";
+import { Box, fontSize, padding } from "@mui/system";
+import { useTheme } from "@mui/material/styles";
 import {
   RestartAltOutlined,
   ArrowBackIosOutlined,
@@ -9,56 +10,46 @@ import {
 import { Icon, IconButton } from "@mui/material";
 export default function FlashCardComponent(params) {
   const { flashCards = [] } = params;
-  // const cards = [
-  //   {
-  //     id: 1,
-  //     frontHTML: (
-  //       <div>
-  //         What is the capital of <u>Alaska</u>?
-  //       </div>
-  //     ),
-  //     backHTML: <>Juneau</>,
-  //   },
-  //   {
-  //     id: 2,
-  //     frontHTML: <>What is the capital of California?</>,
-  //     backHTML: <>Sacramento</>,
-  //   },
-  //   {
-  //     id: 3,
-  //     frontHTML: <>What is the capital of New York?</>,
-  //     backHTML: <>Albany</>,
-  //   },
-  //   {
-  //     id: 4,
-  //     frontHTML: <>What is the capital of Florida?</>,
-  //     backHTML: <>Tallahassee</>,
-  //   },
-  //   {
-  //     id: 5,
-  //     frontHTML: <>What is the capital of Texas?</>,
-  //     backHTML: <>Austin</>,
-  //   },
-  //   {
-  //     id: 6,
-  //     frontHTML: <>What is the capital of New Mexico?</>,
-  //     backHTML: <>Santa Fe</>,
-  //   },
-  //   {
-  //     id: 7,
-  //     frontHTML: <>What is the capital of Arizona?</>,
-  //     backHTML: <>Phoenix</>,
-  //   },
-  // ];
+  const theme = useTheme();
 
   const cards = flashCards?.map((card) => {
+    const [groupFront, keyFront] = card.colorFront.split(".");
+    const [groupBack, keyBack] = card.colorBack.split(".");
+    const colorFront = theme.palette?.[groupFront]?.[keyFront];
+    const colorBack = theme.palette?.[groupBack]?.[keyBack];
+    console.log(colorBack);
+
     return {
       id: card.id,
-      frontHTML: <div>{card.front}</div>,
-      backHTML: <div>{card.back}</div>,
+      frontHTML: <Box sx={{}}>{card.front}</Box>,
+      frontContentStyle: {
+        backgroundColor: colorFront,
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "35px",
+        width: "100%", // ou defina uma largura específica, ex: "300px"
+        overflow: "auto", // isso ativa a scrollbar automática
+        textAlign: "center", // opcional
+        padding: "40px",
+      },
+
+      backHTML: <Box>{card.back}</Box>,
+      backContentStyle: {
+        backgroundColor: colorBack,
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "35px",
+        width: "100%", // ou defina uma largura específica, ex: "300px"
+        overflow: "auto", // isso ativa a scrollbar automática
+        textAlign: "center", // opcional
+        padding: "40px",
+      },
     };
   });
-  console.log(flashCards);
 
   const controlRef = useRef({}); // {} should definitely be passed to useRef for it to work
   const currentCardFlipRef = useRef(); // nothing should be passed to useRef for it to work
