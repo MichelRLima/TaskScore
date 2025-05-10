@@ -26,6 +26,7 @@
     "recharts": "^2.15.3",
     "rimraf": "^4.0.0",
     "styled-components": "^6.1.17",
+    "task-score": "file:",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

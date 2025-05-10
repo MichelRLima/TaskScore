@@ -20,7 +20,6 @@ export default function AddColecoesFlashCards(params) {
   const styles = useStyles(theme);
   const { open, setColecoes, colecoes, setOpen, setSnackbar } = params;
   const [nomeColecao, setNomeColecao] = useState("");
-  const [color, setColor] = useState("");
   const [flashcards, setFlashcards] = useState([
     {
       id: crypto.randomUUID(),
@@ -54,10 +53,6 @@ export default function AddColecoesFlashCards(params) {
       },
     ]);
     wasAddingRef.current = true;
-  };
-
-  const handleChangeColor = (event) => {
-    setColor(event.target.value);
   };
 
   const removeFlashcard = (id) => {
@@ -166,8 +161,8 @@ export default function AddColecoesFlashCards(params) {
                             autoWidth
                             label="Cor"
                           >
-                            {allColor?.map((color) => (
-                              <MenuItem value={color}>
+                            {allColor?.map((color, index) => (
+                              <MenuItem key={index} value={color}>
                                 <Box
                                   sx={{
                                     width: 20,

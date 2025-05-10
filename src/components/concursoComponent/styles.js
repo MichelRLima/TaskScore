@@ -70,6 +70,17 @@ const styles = (theme) => ({
     marginTop: "20px",
     width: "100%",
   },
+  actions: {
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+    gap: 1,
+    cursor: "pointer", // Indica que é clicável
+    "&:hover": {
+      textDecoration: "underline", // Adiciona o sublinhado ao passar o mouse
+      color: "primary.main", // Muda a cor do texto ao passar o mouse
+    },
+  },
   dataGrid: {
     display: "grid",
     "&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell": {

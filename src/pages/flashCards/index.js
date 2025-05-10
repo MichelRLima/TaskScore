@@ -14,6 +14,7 @@ import {
   Snackbar,
   Typography,
   Alert,
+  Divider,
 } from "@mui/material";
 import useStyles from "./styles";
 import { useTheme } from "@mui/material/styles";
@@ -77,10 +78,8 @@ export default function FlashCards() {
 
   const deleteColecao = (id) => {
     setLoadingDelete(true);
-    console.log(id);
 
     const updatedColecoes = colecoes.filter((colecao) => colecao?.id !== id);
-    console.log(updatedColecoes);
 
     setColecoes(updatedColecoes);
     localStorage.setItem("flashCards", JSON.stringify(updatedColecoes));
@@ -160,6 +159,7 @@ export default function FlashCards() {
                   </IconButton>
                 </Box>
               </AccordionSummary>
+              <Divider sx={{ marginBottom: "20px" }} />
               <AccordionDetails>
                 <FlashCardComponent
                   key={index}

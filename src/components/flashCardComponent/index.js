@@ -17,7 +17,6 @@ export default function FlashCardComponent(params) {
     const [groupBack, keyBack] = card.colorBack.split(".");
     const colorFront = theme.palette?.[groupFront]?.[keyFront];
     const colorBack = theme.palette?.[groupBack]?.[keyBack];
-    console.log(colorBack);
 
     return {
       id: card.id,

@@ -5,6 +5,7 @@ import {
   DeleteOutlineOutlined,
   Edit,
   ExpandMore,
+  LaunchOutlined,
   MoreVertOutlined,
   Search,
   SettingsOutlined,
@@ -109,10 +110,31 @@ export default function ConcursoComponent(params) {
       headerName: "Assuntos",
       width: 150,
       flex: 1,
+      // renderCell: (params) => {
+      //   return `${params.row.assuntos?.length || 0} assunto${
+      //     params.row.assuntos?.length > 1 ? "s" : ""
+      //   }`;
+      // },
+
       renderCell: (params) => {
-        return `${params.row.assuntos?.length || 0} assunto${
-          params.row.assuntos?.length > 1 ? "s" : ""
-        }`;
+        return (
+          <Box
+            onClick={() => navigate(`/concurso/disciplina/${params?.row?.id}`)}
+            sx={styles.actions}
+          >
+            <Typography sx={{ display: "inline" }}>
+              {`${params.row.assuntos?.length || 0} assunto${
+                params.row.assuntos?.length > 1 ? "s" : ""
+              }`}
+            </Typography>
+            <LaunchOutlined
+              fontSize="small"
+              sx={{
+                display: "inline", // Garante que o ícone também será afetado pelo sublinhado
+              }}
+            />
+          </Box>
+        );
       },
       valueGetter: (params) => {
         return params?.length || 0;

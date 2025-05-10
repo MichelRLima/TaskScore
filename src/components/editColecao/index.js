@@ -2,8 +2,12 @@ import { Add, Delete } from "@mui/icons-material";
 import {
   Button,
   Divider,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
   Modal,
+  Select,
   TextField,
   Typography,
   useTheme,
@@ -26,10 +30,27 @@ export default function EditColecao({
   const scrollEndRef = useRef(null);
   const [nomeColecao, setNomeColecao] = useState(editColecao?.nomeColecao);
   const [flashcards, setFlashcards] = useState([
-    { id: crypto.randomUUID(), front: "", back: "" },
+    {
+      id: crypto.randomUUID(),
+      front: "",
+      back: "",
+      colorFront: "chip.waitingReview",
+      colorBack: "chip.completed",
+    },
   ]);
+
+  const allColor = [
+    "chip.pending",
+    "chip.inProgress",
+    "chip.completed",
+    "chip.waitingReview",
+    "chip.waitingReturn",
+    "chip.arquive",
+    "chip.attention",
+  ];
   const handleCancelar = () => {
     setOpen(false);
+    setFlashcards(editColecao?.flashcards);
   };
   const handleChange = (id, field, value) => {
     setFlashcards((prev) =>
@@ -40,7 +61,13 @@ export default function EditColecao({
   const addFlashcard = () => {
     setFlashcards([
       ...flashcards,
-      { id: crypto.randomUUID(), front: "", back: "" },
+      {
+        id: crypto.randomUUID(),
+        front: "",
+        back: "",
+        colorFront: "chip.waitingReview",
+        colorBack: "chip.completed",
+      },
     ]);
     wasAddingRef.current = true;
   };
@@ -110,24 +137,86 @@ export default function EditColecao({
                 <Box key={card.id}>
                   <Box sx={styles.containerFlashCard}>
                     <Box sx={{ flexGrow: 1 }}>
-                      <TextField
-                        size="small"
-                        sx={{ width: "100%", margin: "5px 0" }}
-                        label={"Frente"}
-                        value={card.front}
-                        onChange={(e) =>
-                          handleChange(card.id, "front", e.target.value)
-                        }
-                      />
-                      <TextField
-                        size="small"
-                        sx={{ width: "100%", margin: "5px 0" }}
-                        label={"Verso"}
-                        value={card.back}
-                        onChange={(e) =>
-                          handleChange(card.id, "back", e.target.value)
-                        }
-                      />
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <TextField
+                          size="small"
+                          sx={{ width: "100%", margin: "5px 0" }}
+                          label={"Frente"}
+                          value={card.front}
+                          onChange={(e) =>
+                            handleChange(card.id, "front", e.target.value)
+                          }
+                        />
+                        <FormControl size="small" sx={{ m: 1, minWidth: 65 }}>
+                          <InputLabel id="demo-simple-select-autowidth-label">
+                            Cor
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-autowidth-label"
+                            id="demo-simple-select-autowidth"
+                            value={card?.colorFront}
+                            onChange={(e) =>
+                              handleChange(
+                                card.id,
+                                "colorFront",
+                                e.target.value
+                              )
+                            }
+                            autoWidth
+                            label="Cor"
+                          >
+                            {allColor?.map((color, index) => (
+                              <MenuItem key={index} value={color}>
+                                <Box
+                                  sx={{
+                                    width: 20,
+                                    height: 20,
+                                    backgroundColor: color,
+                                  }}
+                                ></Box>
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <TextField
+                          size="small"
+                          sx={{ width: "100%", margin: "5px 0" }}
+                          label={"Verso"}
+                          value={card.back}
+                          onChange={(e) =>
+                            handleChange(card.id, "back", e.target.value)
+                          }
+                        />
+                        <FormControl size="small" sx={{ m: 1, minWidth: 65 }}>
+                          <InputLabel id="demo-simple-select-autowidth-label">
+                            Cor
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-autowidth-label"
+                            id="demo-simple-select-autowidth"
+                            value={card?.colorBack}
+                            onChange={(e) =>
+                              handleChange(card.id, "colorBack", e.target.value)
+                            }
+                            autoWidth
+                            label="Cor"
+                          >
+                            {allColor?.map((color) => (
+                              <MenuItem value={color}>
+                                <Box
+                                  sx={{
+                                    width: 20,
+                                    height: 20,
+                                    backgroundColor: color,
+                                  }}
+                                ></Box>
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
                     </Box>
 
                     <Box>

@@ -15,6 +15,7 @@ export default function Layout(params) {
   const theme = useTheme();
   const styles = useStyles(theme);
   const [value, setValue] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -30,6 +31,12 @@ export default function Layout(params) {
       }
     });
   }, [window.location.pathname]);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -55,21 +62,21 @@ export default function Layout(params) {
             sx={styles.tab}
             icon={<LibraryBooksOutlined />}
             iconPosition="start"
-            label="Concursos"
+            label={windowWidth > 725 ? "Concursos" : ""}
             onClick={() => navigate("/")}
           />
           <Tab
             sx={styles.tab}
             icon={<QueryStatsOutlined />}
             iconPosition="start"
-            label="Metricas"
+            label={windowWidth > 725 ? "Metricas" : ""}
             onClick={() => navigate("/metricas")}
           />
           <Tab
             sx={styles.tab}
             icon={<DashboardCustomizeOutlined />}
             iconPosition="start"
-            label="Flashcards"
+            label={windowWidth > 725 ? "Flashcards" : ""}
             onClick={() => navigate("/flashcards")}
           />
         </Tabs>
