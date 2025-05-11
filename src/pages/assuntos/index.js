@@ -107,11 +107,7 @@ export default function Assuntos() {
         <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
           <Typography variant="title">{disciplina?.disciplina}</Typography>
         </Box>
-        <Paper
-          variant={theme.palette.mode === "dark" ? "outlined" : "elevation"}
-          elevation={3}
-          sx={styles.containerPaper}
-        >
+        <Paper variant={"outlined"} sx={styles.containerPaper}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <TextField
               size="small"

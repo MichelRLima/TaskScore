@@ -20,6 +20,7 @@ export default function Concursos() {
   const [buscarConcurso, setBuscarConcurso] = useState("");
   const [concursos, setConcursos] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const itemsPerPage = 5;
   const [open, setOpen] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
@@ -45,6 +46,10 @@ export default function Concursos() {
       console.error("Erro ao carregar concursos do localStorage:", error);
       setConcursos([]);
     }
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
   }, []);
 
   const handlePageChange = (event, page) => {
@@ -61,11 +66,7 @@ export default function Concursos() {
       <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
         <Typography variant="title">Concursos</Typography>
       </Box>
-      <Paper
-        variant={theme.palette.mode === "dark" ? "outlined" : "elevation"}
-        elevation={3}
-        sx={styles.containerPaper}
-      >
+      <Paper variant={"outlined"} sx={styles.containerPaper}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <TextField
             size="small"

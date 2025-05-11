@@ -7,7 +7,7 @@ const styles = (theme) => ({
     padding: "20px",
   },
   containerPaper: {
-    backgroundColor: theme.palette.mode === "dark" && "transparent",
+    backgroundColor: "transparent",
     minHeight: "400px",
     padding: "20px",
   },

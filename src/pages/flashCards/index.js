@@ -97,11 +97,7 @@ export default function FlashCards() {
       <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
         <Typography variant="title">Coleções de flashcards</Typography>
       </Box>
-      <Paper
-        variant={theme.palette.mode === "dark" ? "outlined" : "elevation"}
-        elevation={3}
-        sx={styles.containerPaper}
-      >
+      <Paper variant={"outlined"} sx={styles.containerPaper}>
         <Box sx={styles.containerAcoes}>
           <TextField
             size="small"

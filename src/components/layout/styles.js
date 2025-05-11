@@ -1,3 +1,5 @@
+import { padding } from "@mui/system";
+
 const styles = (theme) => ({
   containerLayout: {
     justifyContent: "space-between",
@@ -27,6 +29,12 @@ const styles = (theme) => ({
     color: "#FFFFFF",
     "& .MuiTabs-indicator": {
       backgroundColor: "#FFFFFF",
+    },
+  },
+  iconMore: {
+    color: "#FFFFFF",
+    "& svg": {
+      color: "#FFFFFF",
     },
   },
   containerImage: {

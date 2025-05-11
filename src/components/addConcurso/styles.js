@@ -1,3 +1,5 @@
+import { margin, maxWidth } from "@mui/system";
+
 const styles = (theme) => ({
   containerLayout: {
     width: "100%",
@@ -15,7 +17,8 @@ const styles = (theme) => ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 500,
+    width: "90%",
+    maxWidth: 500,
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,

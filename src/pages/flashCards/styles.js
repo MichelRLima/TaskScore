@@ -19,7 +19,7 @@ const styles = (theme) => ({
     margin: "0 20px 0 0",
   },
   containerPaper: {
-    backgroundColor: theme.palette.mode === "dark" && "transparent",
+    backgroundColor: "transparent",
     minHeight: "400px",
     padding: "20px",
   },
