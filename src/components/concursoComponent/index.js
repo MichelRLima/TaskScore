@@ -58,7 +58,7 @@ export default function ConcursoComponent(params) {
   const [openEditConcurso, setOpenEditConcurso] = useState(false);
   const openMenu = Boolean(anchorEl);
   const openMenuConcurso = Boolean(anchorElConcurso);
-
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const filteredRows = rows?.filter((row, index) => {
     row.numero = index;
     return row.disciplina
@@ -95,6 +95,13 @@ export default function ConcursoComponent(params) {
       severity: "success",
     });
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     setRows(concurso?.disciplinas);
   }, [concurso]);
@@ -245,17 +252,30 @@ export default function ConcursoComponent(params) {
               }}
             />
 
-            <Button
-              size="small"
-              sx={{ width: "180px" }}
-              startIcon={<AddOutlined />}
-              variant="outlined"
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              Adicionar disciplina
-            </Button>
+            {windowWidth > 725 && (
+              <Button
+                size="small"
+                sx={{ width: "180px" }}
+                startIcon={<AddOutlined />}
+                variant="outlined"
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                Adicionar disciplina
+              </Button>
+            )}
+            {windowWidth <= 725 && (
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                <AddOutlined />
+              </Button>
+            )}
           </Box>
           <Box sx={styles.boxTable}>
             <DataGrid

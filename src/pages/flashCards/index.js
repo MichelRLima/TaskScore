@@ -41,6 +41,7 @@ export default function FlashCards() {
   const [openDeleteModalColecao, setOpenDeleteModalColecao] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const deleteBody = "Você tem certeza que deseja apagar essa coleção?";
   const confirmDelete = "Apagar coleção";
   const theme = useTheme();
@@ -52,6 +53,13 @@ export default function FlashCards() {
       ?.toLowerCase()
       ?.includes(buscarColecao?.toLowerCase());
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     try {
       const storedColecoes = localStorage.getItem("flashCards");
@@ -122,13 +130,20 @@ export default function FlashCards() {
               ) : null,
             }}
           />
-          <Button
-            onClick={() => setOpen(true)}
-            startIcon={<AddOutlined />}
-            variant="contained"
-          >
-            Adicionar coleção
-          </Button>
+          {windowWidth > 725 && (
+            <Button
+              onClick={() => setOpen(true)}
+              startIcon={<AddOutlined />}
+              variant="contained"
+            >
+              Adicionar coleção
+            </Button>
+          )}
+          {windowWidth <= 725 && (
+            <Button onClick={() => setOpen(true)} variant="contained">
+              <AddOutlined />
+            </Button>
+          )}
         </Box>
 
         {Array.isArray(filteredRows) && filteredRows.length > 0 ? (

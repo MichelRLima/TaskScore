@@ -91,16 +91,22 @@ export default function Concursos() {
               ) : null,
             }}
           />
-
-          <Button
-            size="small"
-            sx={{ width: "180px" }}
-            startIcon={<AddOutlined />}
-            variant="contained"
-            onClick={handleOpen}
-          >
-            Adicionar concurso
-          </Button>
+          {windowWidth > 725 && (
+            <Button
+              size="small"
+              sx={{ width: "180px" }}
+              startIcon={<AddOutlined />}
+              variant="contained"
+              onClick={handleOpen}
+            >
+              Adicionar concurso
+            </Button>
+          )}
+          {windowWidth <= 725 && (
+            <Button size="small" variant="contained" onClick={handleOpen}>
+              <AddOutlined />
+            </Button>
+          )}
         </Box>
         <Box sx={{ margin: "30px 0 0 0" }}>
           {Array.isArray(concursos) && concursos?.length > 0 ? (

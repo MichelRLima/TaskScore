@@ -80,10 +80,17 @@ export default function AssuntoComponent(params) {
   const [openEditAssunto, setOpenEditAssunto] = useState(false);
   const openMenu = Boolean(anchorEl);
   const openMenuAssunto = Boolean(anchorElAssunto);
-
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     setDatagrafico(formatarDados(rows));
   }, [rows]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+  }, []);
 
   const filteredRows = rows?.filter((row, index) => {
     row.numero = index;
@@ -454,17 +461,31 @@ export default function AssuntoComponent(params) {
               }}
             />
 
-            <Button
-              size="small"
-              sx={{ width: "180px" }}
-              startIcon={<AddOutlined />}
-              variant="outlined"
-              onClick={() => {
-                setOpenAddAtividade(true);
-              }}
-            >
-              Adicionar atividade
-            </Button>
+            {windowWidth > 725 && (
+              <Button
+                size="small"
+                sx={{ width: "180px" }}
+                startIcon={<AddOutlined />}
+                variant="outlined"
+                onClick={() => {
+                  setOpenAddAtividade(true);
+                }}
+              >
+                Adicionar atividade
+              </Button>
+            )}
+
+            {windowWidth <= 725 && (
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  setOpenAddAtividade(true);
+                }}
+              >
+                <AddOutlined />
+              </Button>
+            )}
           </Box>
           <Box sx={styles.boxTable}>
             <DataGrid

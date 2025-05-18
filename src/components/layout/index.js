@@ -9,6 +9,10 @@ import {
   Typography,
   Divider,
   ButtonGroup,
+  ListItemText,
+  ListItemIcon,
+  List,
+  ListItemButton,
 } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -24,6 +28,7 @@ import {
   FileUploadOutlined,
   LibraryBooksOutlined,
   MenuOpenOutlined,
+  MenuOutlined,
   QueryStatsOutlined,
   SettingsOutlined,
   SettingsSuggestOutlined,
@@ -35,6 +40,7 @@ export default function Layout(params) {
   const [value, setValue] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const handleDownload = () => {
@@ -79,8 +85,10 @@ export default function Layout(params) {
     };
 
     reader.readAsText(file);
+
     setTimeout(() => {
       setLoadingUpload(false);
+      window.location.href = "/"; // Redireciona e recarrega a página
     }, 2000);
   };
 
@@ -94,6 +102,10 @@ export default function Layout(params) {
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+
+  const toggleDrawerMenu = (newOpen) => () => {
+    setOpenMenu(newOpen);
   };
   const navigate = useNavigate();
   const handleChange = (event, newValue) => {
@@ -141,6 +153,11 @@ export default function Layout(params) {
   return (
     <>
       <Box sx={styles.containerLayout}>
+        {windowWidth <= 725 && (
+          <IconButton onClick={() => setOpenMenu(true)} sx={styles.iconButton}>
+            <MenuOutlined sx={styles.iconMore} fontSize="small" />
+          </IconButton>
+        )}
         <Button onClick={() => navigate("/")}>
           <Box sx={{ width: 130, height: 80 }}>
             <img
@@ -150,72 +167,80 @@ export default function Layout(params) {
             />
           </Box>
         </Button>
+        {windowWidth > 725 && (
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            textColor="inherit"
+            indicatorColor="secondary"
+            sx={styles.tabs}
+          >
+            <Tab
+              sx={styles.tab}
+              icon={<LibraryBooksOutlined />}
+              iconPosition="start"
+              label={windowWidth > 725 ? "Concursos" : ""}
+              onClick={() => navigate("/")}
+            />
 
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          textColor="inherit"
-          indicatorColor="secondary"
-          sx={styles.tabs}
-        >
-          <Tab
-            sx={styles.tab}
-            icon={<LibraryBooksOutlined />}
-            iconPosition="start"
-            label={windowWidth > 725 ? "Concursos" : ""}
-            onClick={() => navigate("/")}
-          />
-          {/* <Tab
-            sx={styles.tab}
-            icon={<QueryStatsOutlined />}
-            iconPosition="start"
-            label={windowWidth > 725 ? "Metricas" : ""}
-            onClick={() => navigate("/metricas")}
-          /> */}
-          <Tab
-            sx={styles.tab}
-            icon={<DashboardCustomizeOutlined />}
-            iconPosition="start"
-            label={windowWidth > 725 ? "Flashcards" : ""}
-            onClick={() => navigate("/flashcards")}
-          />
-        </Tabs>
-        {/* 
-        <IconButton size="small" onClick={() => setOpen(true)}>
-          <MenuOpenOutlined sx={styles.iconMore} fontSize="medium" />
-        </IconButton> */}
-        <Button
-          onClick={() => setOpen(true)}
-          variant="outlined"
-          sx={{
-            color: "#000", // cor do texto no modo claro
-            borderColor: "#ccc", // cor da borda do modo claro
-            borderRadius: "10px",
-            width: 10,
-            "& svg": {
-              color: "#fff", // cor do ícone como no modo claro
-            },
-          }}
-        >
-          <MenuOpenOutlined sx={styles.iconMore} fontSize="medium" />
-        </Button>
+            <Tab
+              sx={styles.tab}
+              icon={<DashboardCustomizeOutlined />}
+              iconPosition="start"
+              label={windowWidth > 725 ? "Flashcards" : ""}
+              onClick={() => navigate("/flashcards")}
+            />
+          </Tabs>
+        )}
 
+        <IconButton onClick={() => setOpen(true)} sx={styles.iconButton}>
+          <SettingsOutlined sx={styles.iconMore} fontSize="small" />
+        </IconButton>
+
+        <Drawer anchor="left" open={openMenu} onClose={toggleDrawerMenu(false)}>
+          <Box sx={styles.boxDrwaer}>
+            <Box sx={{ display: "flex", justifyContent: "right" }}>
+              <IconButton sx={{}} onClick={() => setOpenMenu(false)}>
+                <ArrowBackIosNewOutlined />
+              </IconButton>
+            </Box>
+
+            <Divider />
+            <List component="nav" sx={styles.list}>
+              <ListItemButton
+                selected={window.location.pathname === "/"}
+                onClick={() => {
+                  navigate("/");
+                  setOpenMenu(false);
+                }}
+              >
+                <ListItemIcon>
+                  <LibraryBooksOutlined />
+                </ListItemIcon>
+                <ListItemText primary="Concursos" />
+              </ListItemButton>
+
+              <ListItemButton
+                selected={window.location.pathname === "/flashcards"}
+                onClick={() => {
+                  navigate("/flashcards");
+                  setOpenMenu(false);
+                }}
+              >
+                <ListItemIcon>
+                  <DashboardCustomizeOutlined />
+                </ListItemIcon>
+                <ListItemText primary="Flashcards" />
+              </ListItemButton>
+            </List>
+          </Box>
+        </Drawer>
         <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
-          <Box sx={{ width: "100%", padding: "10px" }}>
+          <Box sx={styles.boxDrwaerConfig}>
             <IconButton onClick={() => setOpen(false)}>
               <ArrowForwardIosOutlined />
             </IconButton>
-          </Box>
-          <Divider />
-          <Box
-            sx={{
-              width: {
-                xs: "50vw", // em telas pequenas (mobile), 80% da largura da viewport
-                sm: 300, // em telas ≥600px, usa 400px fixos
-                md: 400, // em telas ≥900px, usa 500px fixos
-              },
-            }}
-          >
+            <Divider />
             <Paper variant="outlined" sx={{ margin: "10px" }}>
               <Box
                 sx={{ display: "flex", padding: "10px", alignItems: "center" }}
@@ -228,14 +253,7 @@ export default function Layout(params) {
               </Box>
             </Paper>
             <Paper variant="outlined" sx={{ margin: "10px" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  padding: "10px",
-                  gap: 1,
-                  flexDirection: "column",
-                }}
-              >
+              <Box sx={styles.boxDataSystem}>
                 <Typography variant="subtitle2">Dados do sistema</Typography>
                 <ButtonGroup size="small" aria-label="Small button group">
                   {buttons}

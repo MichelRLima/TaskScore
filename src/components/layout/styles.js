@@ -1,4 +1,4 @@
-import { padding } from "@mui/system";
+import { display, fontSize, padding } from "@mui/system";
 
 const styles = (theme) => ({
   containerLayout: {
@@ -25,6 +25,44 @@ const styles = (theme) => ({
       backgroundColor: "#00000021",
     },
   },
+  iconButton: {
+    border: "0.1rem solid #e0e0e0", // borda clara
+    borderRadius: "6px", // deixa o botão mais quadrado (padrão é 50%)
+    padding: "6px", // opcional: ajuste de espaço interno
+  },
+  boxDrwaer: {
+    width: {
+      xs: "80vw", // em telas pequenas: 80% da viewport
+      sm: 400, // ≥600px
+      md: 500, // ≥900px
+      lg: 600, // ≥1200px
+    },
+    display: "flex",
+    flexDirection: "column",
+
+    padding: "10px",
+  },
+  boxDrwaerConfig: {
+    width: {
+      xs: "80vw", // em telas pequenas: 80% da viewport
+      sm: 400, // ≥600px
+      md: 500, // ≥900px
+      lg: 600, // ≥1200px
+    },
+    padding: "10px",
+  },
+  boxDataSystem: {
+    display: "flex",
+    padding: "10px",
+    gap: 1,
+    flexDirection: "column",
+  },
+  list: {
+    display: "flex",
+    gap: 1,
+    flexDirection: "column",
+    width: "100%",
+  },
   tabs: {
     color: "#FFFFFF",
     "& .MuiTabs-indicator": {
@@ -32,6 +70,7 @@ const styles = (theme) => ({
     },
   },
   iconMore: {
+    fontSize: "1.1rem",
     color: "#FFFFFF",
     "& svg": {
       color: "#FFFFFF",

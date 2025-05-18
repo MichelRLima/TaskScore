@@ -39,6 +39,7 @@ export default function Assuntos() {
   const [snackbar, setSnackbar] = useState(null);
   const [open, setOpen] = useState(false);
   const [concursoName, setConcursoName] = useState("");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { id } = useParams();
   useEffect(() => {
     const storedConcursos = JSON.parse(localStorage.getItem("concursos"));
@@ -48,6 +49,13 @@ export default function Assuntos() {
     setAssuntos(disciplina?.assuntos || []);
     setDisciplina(disciplina);
   }, [id]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const concursoId = encontrarConcursoPorDisciplina(concursos, id);
@@ -132,17 +140,30 @@ export default function Assuntos() {
               }}
             />
 
-            <Button
-              size="small"
-              sx={{ width: "180px" }}
-              startIcon={<AddOutlined />}
-              variant="contained"
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              Adicionar assunto
-            </Button>
+            {windowWidth > 725 && (
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<AddOutlined />}
+                sx={{ width: "180px" }}
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                Adicionar assunto
+              </Button>
+            )}
+            {windowWidth <= 725 && (
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                <AddOutlined />
+              </Button>
+            )}
           </Box>
 
           <Box sx={{ margin: "30px 0 0 0" }}>
