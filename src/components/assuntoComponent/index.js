@@ -20,6 +20,7 @@ import {
   InputAdornment,
   Menu,
   MenuItem,
+  Pagination,
   Paper,
   Snackbar,
   TextField,
@@ -539,45 +540,25 @@ export default function AssuntoComponent(params) {
                     <Divider />
                   </div>
                 ))}
-                {/* Paginação */}
+
+                {/* Paginação com bolinhas */}
                 {totalPages > 1 && (
                   <Box
                     sx={{
                       display: "flex",
                       justifyContent: "center",
                       mt: 2,
-                      gap: 1,
                       marginBottom: 2,
                     }}
                   >
-                    <Button
+                    <Pagination
+                      count={totalPages}
+                      page={currentPage}
+                      onChange={(_, page) => setCurrentPage(page)}
+                      color="primary"
+                      shape="rounded"
                       size="small"
-                      variant="outlined"
-                      disabled={currentPage === 1}
-                      onClick={() => setCurrentPage((prev) => prev - 1)}
-                    >
-                      Anterior
-                    </Button>
-                    {[...Array(totalPages)].map((_, idx) => (
-                      <Button
-                        key={idx}
-                        size="small"
-                        variant={
-                          currentPage === idx + 1 ? "contained" : "outlined"
-                        }
-                        onClick={() => setCurrentPage(idx + 1)}
-                      >
-                        {idx + 1}
-                      </Button>
-                    ))}
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      disabled={currentPage === totalPages}
-                      onClick={() => setCurrentPage((prev) => prev + 1)}
-                    >
-                      Próxima
-                    </Button>
+                    />
                   </Box>
                 )}
               </Box>
