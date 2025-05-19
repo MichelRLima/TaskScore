@@ -41,20 +41,18 @@ import {
 } from "recharts";
 
 import ModalDelete from "../modalDelete";
-
 import EditAssunto from "../editAssunto";
 import {
   encontrarConcursoPorDisciplina,
   extrairDisciplinas,
 } from "../../utils/functions";
 import AddAtividade from "../addAtividade";
-
 import dayjs from "dayjs";
 import EditAtividade from "../editAtividade";
+import CardAtividade from "../cardsComponent/cardAtividade";
 export default function AssuntoComponent(params) {
   const { assunto, setConcursos, concursos, setAssuntos, disciplinaId } =
     params;
-
   const [openAddAtividade, setOpenAddAtividade] = useState(false);
   const deleteBody = "Você tem certeza que deseja apagar esse assunto?";
   const deleteBodyAtividade =
@@ -62,7 +60,6 @@ export default function AssuntoComponent(params) {
   const confirmDelete = "Deletar assunto";
   const confirmDeleteAtividade = "Deletar atividade";
   const [openEdit, setOpenEdit] = useState(false);
-
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
   const [editAssunto, setEditAssunto] = useState({});
@@ -81,6 +78,9 @@ export default function AssuntoComponent(params) {
   const openMenu = Boolean(anchorEl);
   const openMenuAssunto = Boolean(anchorElAssunto);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   useEffect(() => {
     setDatagrafico(formatarDados(rows));
   }, [rows]);
@@ -92,12 +92,29 @@ export default function AssuntoComponent(params) {
     window.addEventListener("resize", handleResize);
   }, []);
 
-  const filteredRows = rows?.filter((row, index) => {
-    row.numero = index;
-    return row?.nomeAtividade
-      ?.toLowerCase()
-      ?.includes(buscarAtividade?.toLowerCase());
-  });
+  const filteredRows = rows
+    ?.map((row, index) => {
+      row.numero = index;
+      return row;
+    })
+    ?.filter((row) =>
+      row?.nomeAtividade
+        ?.toLowerCase()
+        ?.includes(buscarAtividade?.toLowerCase())
+    );
+
+  const totalPages = Math.ceil((filteredRows?.length || 0) / itemsPerPage);
+  const paginatedRows =
+    filteredRows?.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    ) || [];
+  useEffect(() => {
+    const newTotalPages = Math.ceil((filteredRows?.length || 0) / itemsPerPage);
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+      setCurrentPage(newTotalPages);
+    }
+  }, [filteredRows, itemsPerPage, currentPage]);
   const formatarDados = (atividades) => {
     return atividades
       .map((item) => ({
@@ -488,26 +505,92 @@ export default function AssuntoComponent(params) {
             )}
           </Box>
           <Box sx={styles.boxTable}>
-            <DataGrid
-              sx={styles.dataGrid}
-              rows={filteredRows}
-              columns={columns}
-              autoHeight={true}
-              disableRowSelectionOnClick
-              disableColumnMenu
-              pageSizeOptions={[10, 15, 20]}
-              initialState={{
-                pagination: {
-                  paginationModel: { pageSize: 10, page: 0 },
-                },
-              }}
-            />
+            {windowWidth > 725 && (
+              <DataGrid
+                sx={styles.dataGrid}
+                rows={filteredRows}
+                columns={columns}
+                autoHeight={true}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                pageSizeOptions={[10, 15, 20]}
+                initialState={{
+                  pagination: {
+                    paginationModel: { pageSize: 10, page: 0 },
+                  },
+                }}
+              />
+            )}
+            {windowWidth <= 725 && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
+                {paginatedRows?.map((atividade, index) => (
+                  <div key={atividade.id || index}>
+                    <CardAtividade
+                      atividade={atividade}
+                      handleClickAssunto={handleClickAssunto}
+                      setThisRow={setThisRow}
+                    />
+                    <Divider />
+                  </div>
+                ))}
+                {/* Paginação */}
+                {totalPages > 1 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      mt: 2,
+                      gap: 1,
+                      marginBottom: 2,
+                    }}
+                  >
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage((prev) => prev - 1)}
+                    >
+                      Anterior
+                    </Button>
+                    {[...Array(totalPages)].map((_, idx) => (
+                      <Button
+                        key={idx}
+                        size="small"
+                        variant={
+                          currentPage === idx + 1 ? "contained" : "outlined"
+                        }
+                        onClick={() => setCurrentPage(idx + 1)}
+                      >
+                        {idx + 1}
+                      </Button>
+                    ))}
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      disabled={currentPage === totalPages}
+                      onClick={() => setCurrentPage((prev) => prev + 1)}
+                    >
+                      Próxima
+                    </Button>
+                  </Box>
+                )}
+              </Box>
+            )}
           </Box>
           <Paper
             variant="outlined"
-            sx={{ width: "100%", height: "300px", padding: 6 }}
+            sx={{ width: "100%", height: "300px", padding: "45px 0" }}
           >
-            <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ marginBottom: 2, marginLeft: 2 }}
+            >
               Gráfico de desempenho
             </Typography>
 
@@ -516,8 +599,8 @@ export default function AssuntoComponent(params) {
                 data={dataGraficos}
                 margin={{
                   top: 10,
-                  right: 30,
-                  left: 0,
+                  right: 20,
+                  left: -10,
                   bottom: 0,
                 }}
               >
