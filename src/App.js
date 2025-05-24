@@ -9,7 +9,7 @@ import Metricas from "./pages/metricas";
 import Concursos from "./pages/concursos";
 import Assuntos from "./pages/assuntos";
 import FlashCards from "./pages/flashCards";
-
+import { Analytics } from "@vercel/analytics/react";
 import ReactGA from "react-ga4";
 ReactGA.initialize(process.env.REACT_APP_GA_MEASUREMENT_ID);
 ReactGA.send("pageview");
@@ -22,6 +22,7 @@ function App() {
   return (
     <ThemeProvider theme={myTheme}>
       <CssBaseline />
+      <Analytics />
       <Box
         className="App"
         sx={{ backgroundColor: "background.wallpaper", minHeight: "100vh" }}
