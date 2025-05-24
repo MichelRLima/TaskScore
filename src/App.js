@@ -10,6 +10,10 @@ import Concursos from "./pages/concursos";
 import Assuntos from "./pages/assuntos";
 import FlashCards from "./pages/flashCards";
 
+import ReactGA from "react-ga4";
+ReactGA.initialize(process.env.REACT_APP_GA_MEASUREMENT_ID);
+ReactGA.send("pageview");
+
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [colorMode, setColorMode] = useState(prefersDarkMode);

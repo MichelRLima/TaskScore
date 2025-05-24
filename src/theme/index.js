@@ -7,7 +7,7 @@ const theme = (colorMode) =>
       palette: {
         mode: !colorMode ? "light" : "dark",
         primary: {
-          main: !colorMode ? "#212B36" : "#FFFFFF",
+          main: !colorMode ? "#115493" : "#1978d2",
         },
 
         secondary: {
@@ -26,9 +26,9 @@ const theme = (colorMode) =>
         },
 
         background: {
-          default: !colorMode ? "#ffffff" : "#161c24",
-          wallpaper: !colorMode ? "#f5f4f0" : "#161c24",
-          paper: !colorMode ? "#ffffff" : "#212B36",
+          default: !colorMode ? "#ffffff" : "#2F2F2F",
+          wallpaper: !colorMode ? "#f5f4f0" : "#2F2F2F",
+          paper: !colorMode ? "#ffffff" : "#2F2F2F",
         },
         chartPallet: [
           "#00A76F",
@@ -77,7 +77,10 @@ const theme = (colorMode) =>
         MuiPaper: {
           styleOverrides: {
             root: {
-              backgroundColor: !colorMode ? "#ffffff" : "#252C35",
+              backgroundColor: !colorMode ? "#ffffff" : "#121212",
+            },
+            outlined: {
+              backgroundColor: !colorMode ? "#ffffff" : "#1e1e1e", // exemplo de cor diferente para outlined
             },
           },
         },

@@ -241,7 +241,7 @@ export default function Layout(params) {
               <ArrowForwardIosOutlined />
             </IconButton>
             <Divider />
-            <Paper variant="outlined" sx={{ margin: "10px" }}>
+            <Paper variant={"outlined"} sx={{ margin: "10px" }}>
               <Box
                 sx={{ display: "flex", padding: "10px", alignItems: "center" }}
               >
