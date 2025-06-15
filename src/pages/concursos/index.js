@@ -1,6 +1,8 @@
 import {
   Alert,
+  Box,
   Button,
+  Grid,
   IconButton,
   InputAdornment,
   Pagination,
@@ -9,13 +11,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Box, useTheme } from "@mui/system";
+import { useTheme } from "@mui/system";
 import { useEffect, useState } from "react";
-import { AddOutlined, Clear, Search } from "@mui/icons-material";
+import {
+  Add,
+  AddOutlined,
+  BookmarkBorderOutlined,
+  Clear,
+  ImportContactsOutlined,
+  Search,
+} from "@mui/icons-material";
 import useStyles from "./styles";
 import AddConcurso from "../../components/addConcurso";
 
 import ConcursoComponent from "../../components/concursoComponent";
+import CardComponent from "../../components/cardComponent";
 export default function Concursos() {
   const [buscarConcurso, setBuscarConcurso] = useState("");
   const [concursos, setConcursos] = useState([]);
@@ -61,10 +71,38 @@ export default function Concursos() {
     currentPage * itemsPerPage
   );
 
+  function allDisciplinas(concursos) {
+    return concursos.reduce((total, concurso) => {
+      return total + (concurso.disciplinas?.length || 0);
+    }, 0);
+  }
+
   return (
     <Box sx={styles?.containerLayout}>
       <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
-        <Typography variant="title">Concursos</Typography>
+        <Grid
+          flexGrow={1}
+          container
+          spacing={2}
+          columns={{ xs: 2, sm: 12, md: 12 }}
+        >
+          <Grid size={{ xs: 2, sm: 6, md: 3 }}>
+            <CardComponent
+              icon={BookmarkBorderOutlined}
+              typeCard={3}
+              descriptionCard={"Concursos"}
+              valueCard={concursos?.length || 0}
+            />
+          </Grid>
+          <Grid size={{ xs: 2, sm: 6, md: 3 }}>
+            <CardComponent
+              icon={ImportContactsOutlined}
+              valueCard={allDisciplinas(concursos)}
+              descriptionCard={"Disciplinas"}
+              typeCard={4}
+            />
+          </Grid>
+        </Grid>
       </Box>
       <Paper variant={"outlined"} sx={styles.containerPaper}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>

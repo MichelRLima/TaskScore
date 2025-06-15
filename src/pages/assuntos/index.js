@@ -26,6 +26,7 @@ import {
   encontrarConcursoPorDisciplina,
   extrairDisciplinas,
 } from "../../utils/functions";
+import CardComponent from "../../components/cardComponent";
 
 export default function Assuntos() {
   const theme = useTheme();
@@ -115,6 +116,11 @@ export default function Assuntos() {
         <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
           <Typography variant="title">{disciplina?.disciplina}</Typography>
         </Box>
+        <CardComponent
+          descriptionCard={"        "}
+          valueCard={disciplina?.disciplina}
+          typeCard={7}
+        />
         <Paper variant={"outlined"} sx={styles.containerPaper}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <TextField

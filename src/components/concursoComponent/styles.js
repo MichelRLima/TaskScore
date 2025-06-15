@@ -95,6 +95,16 @@ const styles = (theme) => ({
       outline: "none !important",
     },
   },
+  containerBox: {
+    position: "absolute",
+    width: "120px",
+    height: "120px",
+    right: -25,
+    bottom: -25,
+    borderRadius: "10px",
+    transform: "rotate(50deg)",
+    opacity: 0.3,
+  },
 });
 
 export default styles;

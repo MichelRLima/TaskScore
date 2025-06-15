@@ -1,7 +1,7 @@
 const styles = (theme) => ({
   containerLayout: {
     width: "100%",
-    height: "30px",
+
     maxWidth: "1000px",
     margin: "50px auto",
     padding: "20px",

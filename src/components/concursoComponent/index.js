@@ -1,10 +1,12 @@
 import {
   AddOutlined,
   ArticleOutlined,
+  BookmarkBorderOutlined,
   Clear,
   DeleteOutlineOutlined,
   Edit,
   ExpandMore,
+  ImportContactsOutlined,
   LaunchOutlined,
   MoreVertOutlined,
   Search,
@@ -34,6 +36,7 @@ import { useNavigate } from "react-router-dom";
 import EditDisciplina from "../editDisciplina";
 import ModalDelete from "../modalDelete";
 import EditConcurso from "../editConcurso";
+import { render } from "@testing-library/react";
 
 export default function ConcursoComponent(params) {
   const { concurso, setConcursos, allConcursos } = params;
@@ -111,17 +114,28 @@ export default function ConcursoComponent(params) {
       headerName: "Disciplina",
       width: 150,
       flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box
+            onClick={() => navigate(`/concurso/disciplina/${params?.row?.id}`)}
+            sx={styles.actions}
+          >
+            <ImportContactsOutlined
+              fontSize="small"
+              sx={{ color: "#ff9800" }}
+            />
+            <Typography sx={{ display: "inline" }}>
+              {params.row.disciplina}
+            </Typography>
+          </Box>
+        );
+      },
     },
     {
       field: "assuntos",
       headerName: "Assuntos",
       width: 150,
       flex: 1,
-      // renderCell: (params) => {
-      //   return `${params.row.assuntos?.length || 0} assunto${
-      //     params.row.assuntos?.length > 1 ? "s" : ""
-      //   }`;
-      // },
 
       renderCell: (params) => {
         return (
@@ -208,9 +222,23 @@ export default function ConcursoComponent(params) {
           expandIcon={<ExpandMore />}
           aria-controls="panel1-content"
           id="panel1-header"
+          sx={{ position: "relative", overflow: "hidden" }}
         >
+          <Box sx={{ ...styles.containerBox, backgroundColor: "#2196f3" }} />
           <Box sx={styles.conatinerAcoesAccordion}>
-            <Typography variant="mySubtitle">{concurso?.concurso}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 2,
+              }}
+            >
+              <BookmarkBorderOutlined sx={{ color: "#2196f3" }} />
+
+              <Typography variant="mySubtitle">{concurso?.concurso}</Typography>
+            </Box>
+
             <IconButton
               component="div"
               onClick={(e) => {
@@ -285,7 +313,7 @@ export default function ConcursoComponent(params) {
               autoHeight={true}
               disableRowSelectionOnClick
               disableColumnMenu
-              pageSizeOptions={[10, 15, 20]}
+              pageSize={10}
               initialState={{
                 pagination: {
                   paginationModel: { pageSize: 10, page: 0 },
