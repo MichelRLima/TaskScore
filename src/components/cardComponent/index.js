@@ -29,9 +29,20 @@ export default function CardComponent(params) {
   const styles = useStyles(theme);
   const Icon = icon;
   return (
-    <Paper variant="outlined" sx={styles.containerComponent}>
+    <Paper variant="elevation" elevation={3} sx={styles.containerComponent}>
       <Box sx={{ width: "100%" }}>
-        <Typography sx={{ ...styles.valueCard, color: colorCard[typeCard] }}>
+        <Typography
+          sx={{
+            ...styles.valueCard,
+            color: colorCard[typeCard],
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            display: "block",
+            maxWidth: "80%",
+          }}
+          title={valueCard}
+        >
           {valueCard}
         </Typography>
         <Typography sx={{ fontWeight: "bold", fontSize: "12px" }}>

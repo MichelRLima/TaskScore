@@ -1,3 +1,5 @@
+import { gap } from "@mui/system";
+
 const styles = (theme) => ({
   containerLayout: {
     width: "100%",
@@ -97,13 +99,31 @@ const styles = (theme) => ({
   },
   containerBox: {
     position: "absolute",
-    width: "120px",
-    height: "120px",
-    right: -25,
-    bottom: -25,
+    width: "130px",
+    height: "130px",
+    right: -30,
+    bottom: -10,
     borderRadius: "10px",
     transform: "rotate(50deg)",
     opacity: 0.3,
+  },
+  descriptionAccordion: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1px",
+  },
+  containerIcon: {
+    display: "flex",
+    alignItems: "center",
+    gap: "1px",
+    marginBottom: "5px",
+  },
+  containerStatus: {
+    display: "flex",
+    flexWrap: "wrap",
+    marginLeft: "20px",
+    marginTop: "5px",
+    gap: "10px",
   },
 });
 

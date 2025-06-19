@@ -10,13 +10,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Box, Stack, useTheme } from "@mui/system";
+import { Box, Grid, Stack, useTheme } from "@mui/system";
 import { useEffect, useState } from "react";
 import {
   AddOutlined,
+  BookmarkBorderOutlined,
+  CheckOutlined,
   Clear,
+  ClearOutlined,
+  ImportContactsOutlined,
   LibraryBooksOutlined,
   Search,
+  StickyNote2Outlined,
+  TopicOutlined,
 } from "@mui/icons-material";
 import useStyles from "./styles";
 import { useParams } from "react-router-dom";
@@ -38,6 +44,11 @@ export default function Assuntos() {
   const [assuntos, setAssuntos] = useState([]);
   const [concursos, setConcursos] = useState([]);
   const [snackbar, setSnackbar] = useState(null);
+  const [analiseAtividades, setAnaliseAtividades] = useState({
+    acertos: 0,
+    erros: 0,
+    atividades: 0,
+  });
   const [open, setOpen] = useState(false);
   const [concursoName, setConcursoName] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -62,6 +73,8 @@ export default function Assuntos() {
     const concursoId = encontrarConcursoPorDisciplina(concursos, id);
     const concurso = concursos?.find((item) => item?.id === concursoId);
     setConcursoName(concurso?.concurso);
+    analiseErrosEAcertos(assuntos);
+    analiseTotalAtividades(assuntos);
   }, [assuntos]);
 
   const filteredRows = assuntos?.filter((row, index) => {
@@ -105,22 +118,120 @@ export default function Assuntos() {
     </Typography>,
   ];
 
+  const Concurso = () => {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <BookmarkBorderOutlined sx={{ color: "#2196f3", fontSize: "15px" }} />
+        <Typography sx={{ fontSize: "10px" }}>Concurso:</Typography>
+
+        <Typography
+          variant="mySubtitle"
+          sx={{ fontSize: "10px", fontWeight: "bold", marginLeft: "5px" }}
+        >
+          {concursoName || "Nenhum concurso encontrado"}
+        </Typography>
+      </Box>
+    );
+  };
+  function analiseErrosEAcertos(array) {
+    let totalAcertos = 0;
+    let totalErros = 0;
+
+    array.forEach((obj) => {
+      obj.atividades.forEach((atividade) => {
+        const acertos = parseInt(atividade.totalAcertos);
+        const questoes = parseInt(atividade.totalQuestoes);
+        totalAcertos += acertos;
+        totalErros += questoes - acertos;
+      });
+    });
+    setAnaliseAtividades({
+      acertos: totalAcertos,
+      erros: totalErros,
+    });
+    return {
+      totalAcertos,
+      totalErros,
+    };
+  }
+
+  function analiseTotalAtividades(array) {
+    let total = 0;
+
+    array.forEach((obj) => {
+      if (Array.isArray(obj.atividades)) {
+        total += obj.atividades.length;
+      }
+    });
+    setAnaliseAtividades((prev) => ({
+      ...prev,
+      atividades: total,
+    }));
+  }
+
   return (
     <>
       <Box sx={styles.containerLayout}>
         <Stack spacing={2} sx={{ margin: "0 0 20px 0" }}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb">
+          <Breadcrumbs
+            sx={{ fontSize: "0.8rem" }}
+            separator="›"
+            aria-label="breadcrumb"
+          >
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
+
         <Box sx={{ width: "100%", margin: "0 0 20px 0" }}>
-          <Typography variant="title">{disciplina?.disciplina}</Typography>
+          <Grid
+            flexGrow={1}
+            container
+            spacing={1}
+            columns={{ xs: 2, sm: 12, md: 12 }}
+          >
+            {" "}
+            <Grid size={{ xs: 2, sm: 12, md: 12 }}>
+              <CardComponent
+                descriptionCard={<Concurso />}
+                valueCard={disciplina?.disciplina}
+                typeCard={4}
+                icon={ImportContactsOutlined}
+              />
+            </Grid>
+            <Grid size={{ xs: 2, sm: 6, md: 3 }}>
+              <CardComponent
+                icon={TopicOutlined}
+                typeCard={5}
+                descriptionCard={"Assuntos"}
+                valueCard={assuntos?.length || 0}
+              />
+            </Grid>
+            <Grid size={{ xs: 2, sm: 6, md: 3 }}>
+              <CardComponent
+                icon={StickyNote2Outlined}
+                valueCard={analiseAtividades?.atividades || 0}
+                descriptionCard={"Atividades"}
+                typeCard={10}
+              />
+            </Grid>
+            <Grid size={{ xs: 2, sm: 6, md: 3 }}>
+              <CardComponent
+                icon={CheckOutlined}
+                valueCard={analiseAtividades?.acertos || 0}
+                descriptionCard={"Acertos"}
+                typeCard={2}
+              />
+            </Grid>
+            <Grid size={{ xs: 2, sm: 6, md: 3 }}>
+              <CardComponent
+                icon={ClearOutlined}
+                valueCard={analiseAtividades.erros || 0}
+                descriptionCard={"Erros"}
+                typeCard={1}
+              />
+            </Grid>
+          </Grid>
         </Box>
-        <CardComponent
-          descriptionCard={"        "}
-          valueCard={disciplina?.disciplina}
-          typeCard={7}
-        />
         <Paper variant={"outlined"} sx={styles.containerPaper}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <TextField

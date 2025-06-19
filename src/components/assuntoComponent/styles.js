@@ -20,6 +20,32 @@ const styles = (theme) => ({
     boxShadow: 24,
     p: 4,
   },
+  containerBox: {
+    position: "absolute",
+    width: "130px",
+    height: "130px",
+    right: -25,
+    bottom: -20,
+    borderRadius: "10px",
+    transform: "rotate(50deg)",
+    opacity: 0.3,
+  },
+  containerStatus: {
+    display: "flex",
+    gap: "10px",
+    marginTop: "5px",
+    marginLeft: "15px",
+  },
+  descriptionAccordion: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1px",
+  },
+  containerIcon: {
+    display: "flex",
+    alignItems: "center",
+    gap: "1px",
+  },
   containerButtons: {
     display: "flex",
     justifyContent: "end",

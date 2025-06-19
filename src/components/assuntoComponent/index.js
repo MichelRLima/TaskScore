@@ -1,12 +1,19 @@
 import {
   AddOutlined,
+  CalendarTodayOutlined,
+  CheckOutlined,
   Clear,
+  ClearOutlined,
+  DataSaverOffOutlined,
   DeleteOutlineOutlined,
   Edit,
   ExpandMore,
   MoreVertOutlined,
   Search,
   SettingsOutlined,
+  SignalCellularAltOutlined,
+  StickyNote2Outlined,
+  TopicOutlined,
 } from "@mui/icons-material";
 import {
   Accordion,
@@ -64,6 +71,11 @@ export default function AssuntoComponent(params) {
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
   const [editAssunto, setEditAssunto] = useState({});
+  const [analiseDataAtividades, setAnaliseDataAtividades] = useState({
+    totalAtividades: 0,
+    totalAcertos: 0,
+    totalErros: 0,
+  });
   const theme = useTheme();
   const styles = useStyles(theme);
   const [buscarAtividade, setBuscarAtividade] = useState("");
@@ -84,6 +96,7 @@ export default function AssuntoComponent(params) {
 
   useEffect(() => {
     setDatagrafico(formatarDados(rows));
+    analiseAtividade(assunto);
   }, [rows]);
 
   useEffect(() => {
@@ -129,6 +142,27 @@ export default function AssuntoComponent(params) {
       .sort((a, b) => new Date(a.DataOriginal) - new Date(b.DataOriginal)) // ordenar da mais antiga para a mais recente
       .slice(0, 30);
   };
+
+  function analiseAtividade(obj) {
+    const atividades = obj.atividades || [];
+
+    let totalAtividades = atividades.length;
+    let totalAcertos = 0;
+    let totalErros = 0;
+
+    atividades.forEach((atividade) => {
+      const acertos = parseInt(atividade.totalAcertos);
+      const questoes = parseInt(atividade.totalQuestoes);
+
+      totalAcertos += acertos;
+      totalErros += questoes - acertos;
+    });
+    setAnaliseDataAtividades({
+      totalAtividades: totalAtividades,
+      totalAcertos: totalAcertos,
+      totalErros: totalErros,
+    });
+  }
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -332,18 +366,36 @@ export default function AssuntoComponent(params) {
       headerName: "Atividade",
       width: 150,
       flex: 1,
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <StickyNote2Outlined fontSize="small" sx={{ color: "#3f51b5" }} />
+          Atividade
+        </Typography>
+      ),
     },
     {
       field: "totalQuestoes",
       headerName: "Total de questões",
       minWidth: 180,
       flex: 1,
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <DataSaverOffOutlined fontSize="small" sx={{ color: "#00bcd4" }} />
+          Total de questões
+        </Typography>
+      ),
     },
     {
       field: "totalAcertos",
       headerName: "Acertos",
       minWidth: 100,
       flex: 1,
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <CheckOutlined fontSize="small" sx={{ color: "#4caf50" }} />
+          Acertos
+        </Typography>
+      ),
     },
     {
       field: " ",
@@ -353,12 +405,27 @@ export default function AssuntoComponent(params) {
       valueGetter: (params, row) => {
         return row?.totalQuestoes - row?.totalAcertos;
       },
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <ClearOutlined fontSize="small" sx={{ color: "#f44336" }} />
+          Erros
+        </Typography>
+      ),
     },
     {
       field: "analise",
       headerName: "Análise",
       width: 100,
       flex: 1,
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <SignalCellularAltOutlined
+            fontSize="small"
+            sx={{ color: "#ff9800" }}
+          />
+          Análise
+        </Typography>
+      ),
       valueGetter: (params, row) => {
         return row?.totalAcertos
           ? parseFloat(
@@ -395,7 +462,12 @@ export default function AssuntoComponent(params) {
       headerName: "Data",
       maxWidth: 100,
       flex: 1,
-
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <CalendarTodayOutlined fontSize="small" sx={{ color: "#ff5722" }} />
+          Data
+        </Typography>
+      ),
       valueGetter: (params, row) => {
         return row?.date;
       },
@@ -435,9 +507,42 @@ export default function AssuntoComponent(params) {
           expandIcon={<ExpandMore />}
           aria-controls="panel1-content"
           id="panel1-header"
+          sx={{ position: "relative", overflow: "hidden" }}
         >
+          <Box sx={{ ...styles.containerBox, backgroundColor: "#9c27b0" }} />
           <Box sx={styles.conatinerAcoesAccordion}>
-            <Typography variant="mySubtitle">{assunto?.assunto}</Typography>
+            <Box sx={styles.descriptionAccordion}>
+              <Box sx={styles.containerIcon}>
+                <TopicOutlined sx={{ color: "#9c27b0", fontSize: "15px" }} />
+                <Typography sx={{ fontSize: "10px" }}>Assunto:</Typography>
+              </Box>
+              <Typography variant="mySubtitle" sx={{ marginLeft: "15px" }}>
+                {assunto?.assunto}
+              </Typography>
+              <Box sx={styles.containerStatus}>
+                <Box sx={styles.containerIcon}>
+                  <StickyNote2Outlined
+                    sx={{ color: "#3f51b5", fontSize: "15px" }}
+                  />
+                  <Typography sx={{ fontSize: "10px" }}>
+                    Atividades: {analiseDataAtividades?.totalAtividades}
+                  </Typography>
+                </Box>
+                <Box sx={styles.containerIcon}>
+                  <CheckOutlined sx={{ color: "#4caf50", fontSize: "15px" }} />
+                  <Typography sx={{ fontSize: "10px" }}>
+                    Acertos: {analiseDataAtividades?.totalAcertos}
+                  </Typography>
+                </Box>
+                <Box sx={styles.containerIcon}>
+                  <ClearOutlined sx={{ color: "#f44336", fontSize: "15px" }} />
+                  <Typography sx={{ fontSize: "10px" }}>
+                    Erros: {analiseDataAtividades?.totalErros}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+
             <IconButton
               component="div"
               onClick={(e) => {

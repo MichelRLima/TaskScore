@@ -11,6 +11,7 @@ import {
   MoreVertOutlined,
   Search,
   SettingsOutlined,
+  TopicOutlined,
 } from "@mui/icons-material";
 import {
   Accordion,
@@ -36,7 +37,6 @@ import { useNavigate } from "react-router-dom";
 import EditDisciplina from "../editDisciplina";
 import ModalDelete from "../modalDelete";
 import EditConcurso from "../editConcurso";
-import { render } from "@testing-library/react";
 
 export default function ConcursoComponent(params) {
   const { concurso, setConcursos, allConcursos } = params;
@@ -54,6 +54,10 @@ export default function ConcursoComponent(params) {
   const [buscarDisciplina, setBuscarDisciplina] = useState("");
   const [rows, setRows] = useState(concurso?.disciplinas);
   const [thisRow, setThisRow] = useState({});
+  const [analiseStatus, setAnaliseStatus] = useState({
+    totalDisciplinas: 0,
+    totalAtividades: 0,
+  });
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElConcurso, setAnchorElConcurso] = useState(null);
@@ -107,6 +111,7 @@ export default function ConcursoComponent(params) {
   }, []);
   useEffect(() => {
     setRows(concurso?.disciplinas);
+    analiseStatusCards(concurso);
   }, [concurso]);
   const columns = [
     {
@@ -114,16 +119,18 @@ export default function ConcursoComponent(params) {
       headerName: "Disciplina",
       width: 150,
       flex: 1,
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <ImportContactsOutlined fontSize="small" sx={{ color: "#ff9800" }} />
+          Disciplinas
+        </Typography>
+      ),
       renderCell: (params) => {
         return (
           <Box
             onClick={() => navigate(`/concurso/disciplina/${params?.row?.id}`)}
             sx={styles.actions}
           >
-            <ImportContactsOutlined
-              fontSize="small"
-              sx={{ color: "#ff9800" }}
-            />
             <Typography sx={{ display: "inline" }}>
               {params.row.disciplina}
             </Typography>
@@ -136,7 +143,12 @@ export default function ConcursoComponent(params) {
       headerName: "Assuntos",
       width: 150,
       flex: 1,
-
+      renderHeader: () => (
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <TopicOutlined fontSize="small" sx={{ color: "#9c27b0" }} />
+          Assuntos
+        </Typography>
+      ),
       renderCell: (params) => {
         return (
           <Box
@@ -211,6 +223,31 @@ export default function ConcursoComponent(params) {
       severity: "success",
     });
   };
+
+  function analiseStatusCards(obj) {
+    let totalDisciplinas = 0;
+    let totalAssuntos = 0;
+
+    if (!obj.disciplinas || !Array.isArray(obj.disciplinas)) {
+      return { totalDisciplinas, totalAssuntos };
+    }
+
+    totalDisciplinas = obj.disciplinas.length;
+
+    obj.disciplinas.forEach((disciplina) => {
+      if (Array.isArray(disciplina.assuntos)) {
+        totalAssuntos += disciplina.assuntos.length;
+      }
+    });
+
+    setAnaliseStatus({
+      totalDisciplinas: totalDisciplinas,
+      totalAtividades: totalAssuntos,
+    });
+
+    return { totalDisciplinas, totalAssuntos };
+  }
+
   return (
     <>
       <Accordion
@@ -226,17 +263,43 @@ export default function ConcursoComponent(params) {
         >
           <Box sx={{ ...styles.containerBox, backgroundColor: "#2196f3" }} />
           <Box sx={styles.conatinerAcoesAccordion}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 2,
-              }}
-            >
-              <BookmarkBorderOutlined sx={{ color: "#2196f3" }} />
+            <Box sx={styles.descriptionAccordion}>
+              <Box sx={styles.containerIcon}>
+                <BookmarkBorderOutlined
+                  sx={{ color: "#2196f3", fontSize: "15px" }}
+                />
+                <Typography sx={{ fontSize: "10px" }}>Concurso:</Typography>
+              </Box>
 
-              <Typography variant="mySubtitle">{concurso?.concurso}</Typography>
+              <Typography variant="mySubtitle" sx={{ marginLeft: "20px" }}>
+                {concurso?.concurso}
+              </Typography>
+              <Box sx={styles.containerStatus}>
+                <Box
+                  sx={{
+                    ...styles.containerIcon,
+                    gap: "2px",
+                  }}
+                >
+                  <ImportContactsOutlined
+                    sx={{ color: "#ff9800", fontSize: "15px" }}
+                  />
+                  <Typography sx={{ fontSize: "10px" }}>
+                    Disciplinas: {analiseStatus?.totalDisciplinas || 0}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    ...styles.containerIcon,
+                    gap: "2px",
+                  }}
+                >
+                  <TopicOutlined sx={{ color: "#9c27b0", fontSize: "15px" }} />
+                  <Typography sx={{ fontSize: "10px" }}>
+                    Assuntos: {analiseStatus?.totalAtividades || 0}
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
 
             <IconButton
