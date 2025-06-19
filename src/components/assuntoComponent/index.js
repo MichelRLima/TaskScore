@@ -294,7 +294,7 @@ export default function AssuntoComponent(params) {
     const allDisciplinas = extrairDisciplinas(updatedConcursos);
     const disciplina = allDisciplinas?.find(
       (item) => item?.id === disciplinaId
-    ); // ou o id que você quiser
+    );
     setAssuntos(disciplina?.assuntos || []);
     setLoadingDelete(false);
     handleClose();
@@ -355,10 +355,6 @@ export default function AssuntoComponent(params) {
       severity: "success",
     });
   };
-
-  // useEffect(() => {
-  //   setRows(concurso?.disciplinas);
-  // }, [concurso]);
 
   const columns = [
     {
@@ -516,7 +512,10 @@ export default function AssuntoComponent(params) {
                 <TopicOutlined sx={{ color: "#9c27b0", fontSize: "15px" }} />
                 <Typography sx={{ fontSize: "10px" }}>Assunto:</Typography>
               </Box>
-              <Typography variant="mySubtitle" sx={{ marginLeft: "15px" }}>
+              <Typography
+                variant="mySubtitle"
+                sx={{ marginLeft: "15px", marginBottom: "5px" }}
+              >
                 {assunto?.assunto}
               </Typography>
               <Box sx={styles.containerStatus}>

@@ -22,10 +22,10 @@ const styles = (theme) => ({
   },
   containerBox: {
     position: "absolute",
-    width: "130px",
-    height: "130px",
-    right: -25,
-    bottom: -20,
+    width: "140px",
+    height: "140px",
+    right: -35,
+    bottom: -5,
     borderRadius: "10px",
     transform: "rotate(50deg)",
     opacity: 0.3,
@@ -45,6 +45,7 @@ const styles = (theme) => ({
     display: "flex",
     alignItems: "center",
     gap: "1px",
+    marginBottom: "10px",
   },
   containerButtons: {
     display: "flex",
