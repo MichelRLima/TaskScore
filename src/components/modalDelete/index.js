@@ -44,12 +44,11 @@ export default function ModalDelete(params) {
               alignItems: "center",
               gap: 1,
               justifyContent: "center",
-              height: "200px",
               borderTopLeftRadius: "12px",
               borderTopRightRadius: "12px",
             }}
           >
-            {severity === "warning" ? (
+            {/* {severity === "warning" ? (
               <Warning sx={styles.headerIcon} />
             ) : severity === "info" ? (
               <Info sx={styles.headerIcon} />
@@ -57,7 +56,7 @@ export default function ModalDelete(params) {
               <CheckCircle sx={styles.headerIcon} />
             ) : (
               <Error sx={styles.headerIcon} />
-            )}
+            )} */}
 
             <Typography variant="title" sx={styles.headerTitle}>
               Atenção!
@@ -74,7 +73,7 @@ export default function ModalDelete(params) {
 
             <Stack
               direction={"row"}
-              gap={16}
+              gap={10}
               justifyContent={"center"}
               width={"100%"}
             >

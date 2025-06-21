@@ -33,6 +33,7 @@ import {
   SettingsOutlined,
   SettingsSuggestOutlined,
 } from "@mui/icons-material";
+import MiniDrawer from "../drawer";
 export default function Layout(params) {
   const { setColorMode } = params;
   const theme = useTheme();
@@ -152,131 +153,66 @@ export default function Layout(params) {
 
   return (
     <>
-      <Box sx={styles.containerLayout}>
-        {windowWidth <= 725 && (
-          <IconButton onClick={() => setOpenMenu(true)} sx={styles.iconButton}>
-            <MenuOutlined sx={styles.iconMore} fontSize="small" />
-          </IconButton>
-        )}
-        <Button onClick={() => navigate("/")}>
-          <Box sx={{ width: 130, height: 80 }}>
-            <img
-              src="/iconTaskScoreTwo.png" // Caminho correto para a pasta public
-              alt="Minha Imagem"
-              style={styles.containerImage}
-            />
-          </Box>
-        </Button>
-        {windowWidth > 725 && (
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="inherit"
-            indicatorColor="secondary"
-            sx={styles.tabs}
-          >
-            <Tab
-              sx={styles.tab}
-              icon={<LibraryBooksOutlined />}
-              iconPosition="start"
-              label={windowWidth > 725 ? "Concursos" : ""}
-              onClick={() => navigate("/")}
-            />
-
-            <Tab
-              sx={styles.tab}
-              icon={<DashboardCustomizeOutlined />}
-              iconPosition="start"
-              label={windowWidth > 725 ? "Flashcards" : ""}
-              onClick={() => navigate("/flashcards")}
-            />
-          </Tabs>
-        )}
-
-        <IconButton onClick={() => setOpen(true)} sx={styles.iconButton}>
-          <SettingsOutlined sx={styles.iconMore} fontSize="small" />
-        </IconButton>
-
-        <Drawer anchor="left" open={openMenu} onClose={toggleDrawerMenu(false)}>
-          <Box sx={styles.boxDrwaer}>
-            <Box sx={{ display: "flex", justifyContent: "right" }}>
-              <IconButton sx={{}} onClick={() => setOpenMenu(false)}>
-                <ArrowBackIosNewOutlined />
-              </IconButton>
-            </Box>
-
-            <Divider />
-            <List component="nav" sx={styles.list}>
-              <ListItemButton
-                selected={window.location.pathname === "/"}
-                onClick={() => {
-                  navigate("/");
-                  setOpenMenu(false);
-                }}
-              >
-                <ListItemIcon>
-                  <LibraryBooksOutlined />
-                </ListItemIcon>
-                <ListItemText primary="Concursos" />
-              </ListItemButton>
-
-              <ListItemButton
-                selected={window.location.pathname === "/flashcards"}
-                onClick={() => {
-                  navigate("/flashcards");
-                  setOpenMenu(false);
-                }}
-              >
-                <ListItemIcon>
-                  <DashboardCustomizeOutlined />
-                </ListItemIcon>
-                <ListItemText primary="Flashcards" />
-              </ListItemButton>
-            </List>
-          </Box>
-        </Drawer>
-        <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
-          <Box sx={styles.boxDrwaerConfig}>
-            <IconButton onClick={() => setOpen(false)}>
-              <ArrowForwardIosOutlined />
+      <MiniDrawer
+        setColorMode={setColorMode}
+        bodyComponent={
+          <>
+            <IconButton onClick={() => setOpen(true)} sx={styles.iconButton}>
+              <SettingsOutlined sx={styles.iconMore} fontSize="small" />
             </IconButton>
-            <Divider />
-            <Paper variant={"outlined"} sx={{ margin: "10px" }}>
-              <Box
-                sx={{ display: "flex", padding: "10px", alignItems: "center" }}
-              >
-                <Typography variant="subtitle2">Tema do sistema:</Typography>
-                <MaterialUISwitch
-                  defaultChecked
-                  onClick={() => setColorMode((prev) => !prev)}
-                />
-              </Box>
-            </Paper>
-            <Paper variant="outlined" sx={{ margin: "10px" }}>
-              <Box sx={styles.boxDataSystem}>
-                <Typography variant="subtitle2">Dados do sistema</Typography>
-                <ButtonGroup size="small" aria-label="Small button group">
-                  {buttons}
-                </ButtonGroup>
-                <Typography
-                  sx={{
-                    fontSize: "10px",
-                    textAlign: "justify",
-                    color: "#a3a3a3",
-                  }}
-                >
-                  Ao selecionar 'Download', você irá baixar os dados do sistema
-                  salvos no seu dispositivo atual, permitindo transferi-los para
-                  outro dispositivo. Já o botão 'Upload' permite importar esses
-                  dados para o novo dispositivo a partir do arquivo baixado.
-                </Typography>
-              </Box>
-            </Paper>
-          </Box>
-        </Drawer>
-      </Box>
 
-      <Outlet />
+            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+              <Box sx={styles.boxDrwaerConfig}>
+                <IconButton onClick={() => setOpen(false)}>
+                  <ArrowForwardIosOutlined />
+                </IconButton>
+                <Divider />
+                <Paper variant={"outlined"} sx={{ margin: "10px" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      padding: "10px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="subtitle2">
+                      Tema do sistema:
+                    </Typography>
+                    <MaterialUISwitch
+                      defaultChecked
+                      onClick={() => setColorMode((prev) => !prev)}
+                    />
+                  </Box>
+                </Paper>
+                <Paper variant="outlined" sx={{ margin: "10px" }}>
+                  <Box sx={styles.boxDataSystem}>
+                    <Typography variant="subtitle2">
+                      Dados do sistema
+                    </Typography>
+                    <ButtonGroup size="small" aria-label="Small button group">
+                      {buttons}
+                    </ButtonGroup>
+                    <Typography
+                      sx={{
+                        fontSize: "10px",
+                        textAlign: "justify",
+                        color: "#a3a3a3",
+                      }}
+                    >
+                      Ao selecionar 'Download', você irá baixar os dados do
+                      sistema salvos no seu dispositivo atual, permitindo
+                      transferi-los para outro dispositivo. Já o botão 'Upload'
+                      permite importar esses dados para o novo dispositivo a
+                      partir do arquivo baixado.
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Box>
+            </Drawer>
+            <Outlet />
+          </>
+        }
+      />
     </>
   );
 }

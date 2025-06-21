@@ -35,24 +35,26 @@ export default function CardComponent(params) {
           sx={{
             ...styles.valueCard,
             color: colorCard[typeCard],
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            display: "block",
-            maxWidth: "80%",
           }}
           title={valueCard}
         >
           {valueCard}
         </Typography>
-        <Typography sx={{ fontWeight: "bold", fontSize: "12px" }}>
-          {descriptionCard}
-        </Typography>
+        <Typography sx={styles.titleDescription}>{descriptionCard}</Typography>
 
-        <Box
-          sx={{ ...styles.containerBox, backgroundColor: colorCard[typeCard] }}
-        />
-        {Icon && <Icon sx={{ ...styles.icon, color: colorCard[typeCard] }} />}
+        <Box sx={{ ...styles.containerBox }}>
+          <Box sx={styles.containerIcon}>
+            <Box
+              sx={{
+                ...styles.containerBoxStyle,
+                backgroundColor: colorCard[typeCard],
+              }}
+            />
+            {Icon && (
+              <Icon sx={{ ...styles.icon, color: colorCard[typeCard] }} />
+            )}
+          </Box>
+        </Box>
       </Box>
     </Paper>
   );

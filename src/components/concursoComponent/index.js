@@ -262,6 +262,7 @@ export default function ConcursoComponent(params) {
           sx={{ position: "relative", overflow: "hidden" }}
         >
           <Box sx={{ ...styles.containerBox, backgroundColor: "#2196f3" }} />
+
           <Box sx={styles.conatinerAcoesAccordion}>
             <Box sx={styles.descriptionAccordion}>
               <Box sx={styles.containerIcon}>

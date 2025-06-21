@@ -64,7 +64,7 @@ export default function AssuntoComponent(params) {
   const [openAddAtividade, setOpenAddAtividade] = useState(false);
   const deleteBody = "Você tem certeza que deseja apagar esse assunto?";
   const deleteBodyAtividade =
-    "Você tem certeza que deseja apagar essa ativdade?";
+    "Você tem certeza que deseja apagar essa atividade?";
   const confirmDelete = "Deletar assunto";
   const confirmDeleteAtividade = "Deletar atividade";
   const [openEdit, setOpenEdit] = useState(false);
@@ -81,7 +81,7 @@ export default function AssuntoComponent(params) {
   const [buscarAtividade, setBuscarAtividade] = useState("");
   const [rows, setRows] = useState(assunto?.atividades || []);
   const [thisRow, setThisRow] = useState({});
-  const [dataGraficos, setDatagrafico] = useState([]);
+  const [dataGrafico, setDatagrafico] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElAssunto, setAnchorElAssunto] = useState(null);
   const [openDeleteModalAssunto, setOpenDeleteModalAssunto] = useState(false);
@@ -130,16 +130,37 @@ export default function AssuntoComponent(params) {
     }
   }, [filteredRows, itemsPerPage, currentPage]);
   const formatarDados = (atividades) => {
-    return atividades
+    const agrupadoPorData = {};
+
+    atividades.forEach((item) => {
+      const dataFormatada = dayjs(item.date).format("DD/MM/YYYY");
+
+      if (!agrupadoPorData[dataFormatada]) {
+        agrupadoPorData[dataFormatada] = {
+          Data: dataFormatada,
+          DataOriginal: dayjs(item.date).toDate(),
+          Total: 0,
+          Acertos: 0,
+          Erros: 0,
+          Nome: "", // opcional: pode ser removido ou concatenado se quiser mostrar vários nomes
+        };
+      }
+
+      agrupadoPorData[dataFormatada].Total += Number(item.totalQuestoes);
+      agrupadoPorData[dataFormatada].Acertos += Number(item.totalAcertos);
+      agrupadoPorData[dataFormatada].Erros +=
+        Number(item.totalQuestoes) - Number(item.totalAcertos);
+
+      // Se quiser manter os nomes das atividades combinadas:
+      agrupadoPorData[dataFormatada].Nome += `${item.nomeAtividade}, `;
+    });
+
+    return Object.values(agrupadoPorData)
       .map((item) => ({
-        Data: dayjs(item.date).format("DD/MM/YYYY"),
-        DataOriginal: item.date, // guardando a original pra usar no Tooltip se quiser depois
-        Total: Number(item.totalQuestoes),
-        Acertos: Number(item.totalAcertos),
-        Erros: Number(item.totalQuestoes) - Number(item.totalAcertos),
-        Nome: item.nomeAtividade,
+        ...item,
+        Nome: item.Nome.replace(/,\s*$/, ""), // remove a última vírgula
       }))
-      .sort((a, b) => new Date(a.DataOriginal) - new Date(b.DataOriginal)) // ordenar da mais antiga para a mais recente
+      .sort((a, b) => new Date(a.DataOriginal) - new Date(b.DataOriginal))
       .slice(0, 30);
   };
 
@@ -186,7 +207,7 @@ export default function AssuntoComponent(params) {
             <strong>Data:</strong> {label}
           </Typography>
           <Typography variant="body2" sx={styles.textAtividade}>
-            <strong>Atividade:</strong> {atividade}
+            <strong>Atividades:</strong> {atividade}
           </Typography>
           {payload.map((entry, index) => (
             <Typography key={index} variant="body2" sx={{ color: entry.color }}>
@@ -386,6 +407,9 @@ export default function AssuntoComponent(params) {
       headerName: "Acertos",
       minWidth: 100,
       flex: 1,
+      valueGetter: (params, row) => {
+        return parseInt(row?.totalAcertos) || 0;
+      },
       renderHeader: () => (
         <Typography sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <CheckOutlined fontSize="small" sx={{ color: "#4caf50" }} />
@@ -465,7 +489,7 @@ export default function AssuntoComponent(params) {
         </Typography>
       ),
       valueGetter: (params, row) => {
-        return row?.date;
+        return dayjs(row?.date).toDate();
       },
       renderCell: (params) => {
         return dayjs(params?.row?.date)?.format("DD/MM/YY");
@@ -681,7 +705,7 @@ export default function AssuntoComponent(params) {
 
             <ResponsiveContainer width="100%">
               <AreaChart
-                data={dataGraficos}
+                data={dataGrafico}
                 margin={{
                   top: 10,
                   right: 20,

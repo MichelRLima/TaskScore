@@ -22,10 +22,10 @@ const styles = (theme) => ({
   },
   containerBox: {
     position: "absolute",
-    width: "140px",
-    height: "140px",
-    right: -35,
-    bottom: -5,
+    width: "240px",
+    height: "240px",
+    right: -160,
+    bottom: -60,
     borderRadius: "10px",
     transform: "rotate(50deg)",
     opacity: 0.3,
@@ -98,9 +98,6 @@ const styles = (theme) => ({
     width: "100%",
   },
   textAtividade: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
     maxWidth: "200px", // Adjust the width as needed
     display: "inline-block",
   },

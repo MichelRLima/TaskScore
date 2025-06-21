@@ -91,20 +91,6 @@ export default function AddAtividade(params) {
 
       const atividadesCopy = [...(assuntosCopy[assuntoIndex].atividades ?? [])];
 
-      // ⚡ VALIDAÇÃO: verificar se já existe uma atividade com a mesma data (dia/mês/ano)
-      const novaData = dayjs(newAtividade?.date).startOf("day"); // Zera horas/minutos/segundos
-      const dataDuplicada = atividadesCopy.some((atividade) =>
-        dayjs(atividade.date).isSame(novaData, "day")
-      );
-
-      if (dataDuplicada) {
-        setSnackbar({
-          children: "Já existe uma atividade cadastrada para essa data.",
-          severity: "error",
-        });
-        return; // Impede de seguir com o cadastro
-      }
-
       // Continua normalmente se passou na validação
       atividadesCopy.push({
         ...newAtividade,
