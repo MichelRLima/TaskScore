@@ -1,7 +1,5 @@
 import {
   useTheme,
-  Tab,
-  Tabs,
   Button,
   IconButton,
   Paper,
@@ -9,10 +7,6 @@ import {
   Typography,
   Divider,
   ButtonGroup,
-  ListItemText,
-  ListItemIcon,
-  List,
-  ListItemButton,
 } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -21,17 +15,9 @@ import MaterialUISwitch from "../buttonMode";
 
 import { useEffect, useState } from "react";
 import {
-  ArrowBackIosNewOutlined,
   ArrowForwardIosOutlined,
-  DashboardCustomizeOutlined,
   FileDownloadOutlined,
   FileUploadOutlined,
-  LibraryBooksOutlined,
-  MenuOpenOutlined,
-  MenuOutlined,
-  QueryStatsOutlined,
-  SettingsOutlined,
-  SettingsSuggestOutlined,
 } from "@mui/icons-material";
 import MiniDrawer from "../drawer";
 export default function Layout(params) {
@@ -41,7 +27,6 @@ export default function Layout(params) {
   const [value, setValue] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [open, setOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const handleDownload = () => {
@@ -105,14 +90,6 @@ export default function Layout(params) {
     setOpen(newOpen);
   };
 
-  const toggleDrawerMenu = (newOpen) => () => {
-    setOpenMenu(newOpen);
-  };
-  const navigate = useNavigate();
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   const pages = ["/", "/flashcards"];
 
   useEffect(() => {
@@ -123,6 +100,7 @@ export default function Layout(params) {
       }
     });
   }, [window.location.pathname]);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -155,11 +133,16 @@ export default function Layout(params) {
     <>
       <MiniDrawer
         setColorMode={setColorMode}
+        handleDownload={handleDownload}
+        triggerFileInput={triggerFileInput}
+        pages={pages}
+        value={value}
+        windowWidth={windowWidth}
         bodyComponent={
           <>
-            <IconButton onClick={() => setOpen(true)} sx={styles.iconButton}>
+            {/* <IconButton onClick={() => setOpen(true)} sx={styles.iconButton}>
               <SettingsOutlined sx={styles.iconMore} fontSize="small" />
-            </IconButton>
+            </IconButton> */}
 
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box sx={styles.boxDrwaerConfig}>

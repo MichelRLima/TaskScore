@@ -6,7 +6,7 @@ import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
+import useStyles from "./styles";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -16,11 +16,17 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { BookmarkBorderOutlined, Style } from "@mui/icons-material";
+
+import {
+  BookmarkBorderOutlined,
+  FileDownloadOutlined,
+  FileUploadOutlined,
+  Style,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import MaterialUISwitch from "../buttonMode";
+import { Button, ButtonGroup, Paper, Typography } from "@mui/material";
+import { useEffect } from "react";
 
 const drawerWidth = 240;
 
@@ -103,10 +109,39 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer(props) {
-  const { bodyComponent = <>teste</>, setColorMode } = props;
+  const {
+    bodyComponent = <>teste</>,
+    setColorMode,
+    handleDownload,
+    triggerFileInput,
+    windowWidth,
+    pages = [],
+    value = 0,
+  } = props;
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const styles = useStyles(theme);
   const [open, setOpen] = React.useState(false);
+
+  const buttons = [
+    <Button
+      onClick={handleDownload}
+      color="info"
+      startIcon={open && <FileDownloadOutlined />}
+      key="one"
+    >
+      {open ? "Download " : <FileDownloadOutlined />}
+    </Button>,
+    <Button
+      onClick={triggerFileInput}
+      color="success"
+      startIcon={open && <FileUploadOutlined />}
+      key="two"
+    >
+      {open ? "Upload " : <FileUploadOutlined />}
+    </Button>,
+  ];
 
   const menuIconDrawer = [
     { text: "Concursos", icon: <BookmarkBorderOutlined />, link: "/" },
@@ -131,48 +166,37 @@ export default function MiniDrawer(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    if (windowWidth < 710) {
+      setOpen(false);
+    }
+  }, [windowWidth]);
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar
-          sx={{
-            backgroundColor: "#12334B",
-            display: "flex",
-            alignItems: "center",
-            position: "relative",
-            justifyContent: "start",
-            height: "64px", // ou a altura padrão do seu toolbar
-          }}
-        >
+        <Toolbar sx={styles.containerComponent}>
           {/* Botão à esquerda */}
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[
-              {
-                marginRight: 2,
-                zIndex: 2, // garantir que fique acima da imagem
-              },
-              open && { display: "none" },
-            ]}
-          >
-            <MenuIcon />
-          </IconButton>
+          {windowWidth >= 710 && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={[
+                {
+                  marginRight: 2,
+                  zIndex: 2,
+                },
+                open && { display: "none" },
+              ]}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
 
-          {/* Imagem centralizada absoluta */}
-          <Box
-            sx={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: 130,
-              height: 50,
-            }}
-          >
+          <Box sx={styles.containerImg}>
             <img
               src="/iconTaskScoreTwo.png"
               alt="Minha Imagem"
@@ -186,7 +210,7 @@ export default function MiniDrawer(props) {
           </Box>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent" open={open} sx={{ overflowX: "hidden" }}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
@@ -201,110 +225,104 @@ export default function MiniDrawer(props) {
           {menuIconDrawer.map((menu, index) => (
             <ListItem key={menu} disablePadding sx={{ display: "block" }}>
               <ListItemButton
+                selected={pages[value] === menu?.link}
                 sx={[
                   {
                     minHeight: 48,
-                    px: 2.5,
+                    margin: "0 auto",
                   },
                   open
                     ? {
                         justifyContent: "initial",
                       }
                     : {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
                         justifyContent: "center",
                       },
                 ]}
                 onClick={() => navigate(menu.link)}
               >
-                <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: "center",
-                    },
-                    open
+                <Box
+                  sx={
+                    !open
                       ? {
-                          mr: 3,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }
-                      : {
-                          mr: "auto",
-                        },
-                  ]}
+                      : { display: "flex", flexDirection: "row" }
+                  }
                 >
-                  {menu.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={menu?.text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: "center",
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {},
+                    ]}
+                  >
+                    {menu.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography fontSize={open ? "1rem" : "8px"}>
+                        {menu?.text}
+                      </Typography>
+                    }
+                  />
+                </Box>
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
-        <List>
-          {menuConfigIcons.map((menu, index) => (
-            <ListItem key={menu} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
-              >
-                <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: "center",
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: "auto",
-                        },
-                  ]}
-                >
-                  {menu?.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={menu?.title}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <Box
+          sx={{
+            ...styles.containerIconTema,
+            justifyContent: open ? "space-between" : "center",
+          }}
+        >
+          {open && (
+            <Typography sx={{ fontSize: "0.85rem", color: "#a3a3a3" }}>
+              Tema
+            </Typography>
+          )}
+
+          <MaterialUISwitch
+            defaultChecked
+            onClick={() => setColorMode((prev) => !prev)}
+          />
+        </Box>
+
+        <Divider />
+        <ButtonGroup
+          sx={styles.buttonGrup}
+          orientation="vertical"
+          size="small"
+          aria-label="Small button group"
+        >
+          {buttons}
+        </ButtonGroup>
+        {open && (
+          <Paper variant="outlined" sx={styles.paperDescription}>
+            <Typography sx={styles.description}>
+              Ao selecionar 'Download', você irá baixar os dados do sistema
+              salvos no seu dispositivo atual, permitindo transferi-los para
+              outro dispositivo. Já o botão 'Upload' permite importar esses
+              dados para o novo dispositivo a partir do arquivo baixado.
+            </Typography>
+          </Paper>
+        )}
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-
         {bodyComponent}
       </Box>
     </Box>
