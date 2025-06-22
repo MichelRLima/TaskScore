@@ -1,3 +1,5 @@
+import { margin } from "@mui/system";
+
 const styles = (theme) => ({
   containerComponent: {
     backgroundColor: "#12334B",
@@ -36,11 +38,11 @@ const styles = (theme) => ({
     whiteSpace: "normal",
   },
   paperDescription: {
-    width: "100%",
-    maxWidth: "100%",
+    width: "90%",
+
     boxSizing: "border-box",
     p: 1,
-    overflow: "hidden",
+    margin: "0 auto",
   },
 });
 

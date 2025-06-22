@@ -1,32 +1,13 @@
-import {
-  useTheme,
-  Button,
-  IconButton,
-  Paper,
-  Drawer,
-  Typography,
-  Divider,
-  ButtonGroup,
-} from "@mui/material";
-import { Outlet, useNavigate } from "react-router-dom";
-import useStyles from "./styles";
-import { Box } from "@mui/system";
-import MaterialUISwitch from "../buttonMode";
+import { Outlet } from "react-router-dom";
 
 import { useEffect, useState } from "react";
-import {
-  ArrowForwardIosOutlined,
-  FileDownloadOutlined,
-  FileUploadOutlined,
-} from "@mui/icons-material";
+
 import MiniDrawer from "../drawer";
 export default function Layout(params) {
   const { setColorMode } = params;
-  const theme = useTheme();
-  const styles = useStyles(theme);
+
   const [value, setValue] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const handleDownload = () => {
@@ -86,20 +67,7 @@ export default function Layout(params) {
     input.click();
   };
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
-
   const pages = ["/", "/flashcards"];
-
-  useEffect(() => {
-    const pageName = window.location.pathname;
-    pages?.map((page, index) => {
-      if (pageName?.includes(page)) {
-        setValue(index);
-      }
-    });
-  }, [window.location.pathname]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -107,27 +75,6 @@ export default function Layout(params) {
     };
     window.addEventListener("resize", handleResize);
   }, []);
-
-  const buttons = [
-    <Button
-      onClick={handleDownload}
-      loading={loading}
-      color="info"
-      startIcon={<FileDownloadOutlined />}
-      key="one"
-    >
-      Download
-    </Button>,
-    <Button
-      loading={loadingUpload}
-      onClick={triggerFileInput}
-      color="success"
-      startIcon={<FileUploadOutlined />}
-      key="two"
-    >
-      Upload
-    </Button>,
-  ];
 
   return (
     <>
@@ -140,11 +87,7 @@ export default function Layout(params) {
         windowWidth={windowWidth}
         bodyComponent={
           <>
-            {/* <IconButton onClick={() => setOpen(true)} sx={styles.iconButton}>
-              <SettingsOutlined sx={styles.iconMore} fontSize="small" />
-            </IconButton> */}
-
-            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+            {/* <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box sx={styles.boxDrwaerConfig}>
                 <IconButton onClick={() => setOpen(false)}>
                   <ArrowForwardIosOutlined />
@@ -191,7 +134,7 @@ export default function Layout(params) {
                   </Box>
                 </Paper>
               </Box>
-            </Drawer>
+            </Drawer> */}
             <Outlet />
           </>
         }

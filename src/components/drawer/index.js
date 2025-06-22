@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import MaterialUISwitch from "../buttonMode";
 import { Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
+import { useState } from "react";
 
 const drawerWidth = 240;
 
@@ -116,13 +117,25 @@ export default function MiniDrawer(props) {
     triggerFileInput,
     windowWidth,
     pages = [],
-    value = 0,
   } = props;
   const navigate = useNavigate();
   const theme = useTheme();
+  const [value, setValue] = React.useState(0);
+  useEffect(() => {
+    const pageName = window.location.pathname;
+    pages?.map((page, index) => {
+      if (pageName?.includes(page)) {
+        setValue(index);
+      }
+    });
+  }, [window.location.pathname]);
 
   const styles = useStyles(theme);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const toggleDrawer = (newOpen) => () => {
+    setOpenDrawer(newOpen);
+  };
 
   const buttons = [
     <Button
@@ -148,17 +161,6 @@ export default function MiniDrawer(props) {
     { text: "FlashCards", icon: <Style />, link: "/flashcards" },
   ];
 
-  const menuConfigIcons = [
-    {
-      title: "Tema",
-      icon: (
-        <MaterialUISwitch
-          defaultChecked
-          onClick={() => setColorMode((prev) => !prev)}
-        />
-      ),
-    },
-  ];
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -178,11 +180,30 @@ export default function MiniDrawer(props) {
       <AppBar position="fixed" open={open}>
         <Toolbar sx={styles.containerComponent}>
           {/* Botão à esquerda */}
-          {windowWidth >= 710 && (
+
+          {windowWidth > 710 ? (
             <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={handleDrawerOpen}
+              edge="start"
+              sx={[
+                {
+                  marginRight: 2,
+                  zIndex: 2,
+                },
+                open && { display: "none" },
+              ]}
+            >
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={() => {
+                setOpenDrawer(true);
+              }}
               edge="start"
               sx={[
                 {
@@ -210,118 +231,127 @@ export default function MiniDrawer(props) {
           </Box>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open} sx={{ overflowX: "hidden" }}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {menuIconDrawer.map((menu, index) => (
-            <ListItem key={menu} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                selected={pages[value] === menu?.link}
-                sx={[
-                  {
-                    minHeight: 48,
-                    margin: "0 auto",
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      },
-                ]}
-                onClick={() => navigate(menu.link)}
-              >
-                <Box
-                  sx={
-                    !open
+      {windowWidth > 709 ? (
+        <Drawer variant="permanent" open={open} sx={{ overflowX: "hidden" }}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {menuIconDrawer.map((menu, index) => (
+              <ListItem key={menu} disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  selected={pages[value] === menu?.link}
+                  sx={[
+                    {
+                      minHeight: 48,
+                      margin: "0 auto",
+                    },
+                    open
                       ? {
+                          justifyContent: "initial",
+                        }
+                      : {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
                           justifyContent: "center",
-                        }
-                      : { display: "flex", flexDirection: "row" }
-                  }
+                        },
+                  ]}
+                  onClick={() => navigate(menu.link)}
                 >
-                  <ListItemIcon
-                    sx={[
-                      {
-                        minWidth: 0,
-                        justifyContent: "center",
-                      },
-                      open
+                  <Box
+                    sx={
+                      !open
                         ? {
-                            mr: 3,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }
-                        : {},
-                    ]}
-                  >
-                    {menu.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography fontSize={open ? "1rem" : "8px"}>
-                        {menu?.text}
-                      </Typography>
+                        : {
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }
                     }
-                  />
-                </Box>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <Box
-          sx={{
-            ...styles.containerIconTema,
-            justifyContent: open ? "space-between" : "center",
-          }}
-        >
+                  >
+                    <ListItemIcon
+                      sx={[
+                        {
+                          minWidth: 0,
+                          justifyContent: "center",
+                        },
+                        open
+                          ? {
+                              mr: 3,
+                            }
+                          : {},
+                      ]}
+                    >
+                      {menu.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Typography fontSize={open ? "1rem" : "8px"}>
+                          {menu?.text}
+                        </Typography>
+                      }
+                    />
+                  </Box>
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+          <Box
+            sx={{
+              ...styles.containerIconTema,
+              justifyContent: open ? "space-between" : "center",
+            }}
+          >
+            {open && (
+              <Typography sx={{ fontSize: "0.85rem", color: "#a3a3a3" }}>
+                Tema
+              </Typography>
+            )}
+
+            <MaterialUISwitch
+              defaultChecked
+              onClick={() => setColorMode((prev) => !prev)}
+            />
+          </Box>
+
+          <Divider />
+          <ButtonGroup
+            sx={styles.buttonGrup}
+            orientation="vertical"
+            size="small"
+            aria-label="Small button group"
+          >
+            {buttons}
+          </ButtonGroup>
           {open && (
-            <Typography sx={{ fontSize: "0.85rem", color: "#a3a3a3" }}>
-              Tema
-            </Typography>
+            <Paper variant="outlined" sx={styles.paperDescription}>
+              <Typography sx={styles.description}>
+                Ao selecionar 'Download', você irá baixar os dados do sistema
+                salvos no seu dispositivo atual, permitindo transferi-los para
+                outro dispositivo. Já o botão 'Upload' permite importar esses
+                dados para o novo dispositivo a partir do arquivo baixado.
+              </Typography>
+            </Paper>
           )}
+        </Drawer>
+      ) : (
+        <></>
+      )}
 
-          <MaterialUISwitch
-            defaultChecked
-            onClick={() => setColorMode((prev) => !prev)}
-          />
-        </Box>
-
-        <Divider />
-        <ButtonGroup
-          sx={styles.buttonGrup}
-          orientation="vertical"
-          size="small"
-          aria-label="Small button group"
-        >
-          {buttons}
-        </ButtonGroup>
-        {open && (
-          <Paper variant="outlined" sx={styles.paperDescription}>
-            <Typography sx={styles.description}>
-              Ao selecionar 'Download', você irá baixar os dados do sistema
-              salvos no seu dispositivo atual, permitindo transferi-los para
-              outro dispositivo. Já o botão 'Upload' permite importar esses
-              dados para o novo dispositivo a partir do arquivo baixado.
-            </Typography>
-          </Paper>
-        )}
-      </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         {bodyComponent}
       </Box>
