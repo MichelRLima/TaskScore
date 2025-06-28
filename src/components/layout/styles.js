@@ -1,5 +1,3 @@
-import { display, fontSize, padding } from "@mui/system";
-
 const styles = (theme) => ({
   containerLayout: {
     justifyContent: "space-between",
@@ -50,6 +48,8 @@ const styles = (theme) => ({
       lg: 600, // ≥1200px
     },
     padding: "10px",
+    backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#ffffff",
+    height: "100%",
   },
   boxDataSystem: {
     display: "flex",
@@ -81,6 +81,75 @@ const styles = (theme) => ({
     height: "100%", // Altura definida para 100% do Box
     objectFit: "cover", // A imagem cobre o espaço sem distorcer
     borderRadius: "10px",
+  },
+  containerComponent: {
+    backgroundColor: "#12334B",
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+    justifyContent: "start",
+    height: "64px",
+  },
+  containerImg: {
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: 130,
+    height: 50,
+  },
+  description: {
+    display: "block",
+    width: "100%",
+    fontSize: "10px",
+    textAlign: "justify",
+    color: "#a3a3a3",
+    wordBreak: "break-word",
+    whiteSpace: "normal",
+  },
+  paperDescription: {
+    width: "100%",
+    boxSizing: "border-box",
+    p: 1,
+    margin: "0 auto",
+  },
+  buttonGrup: {
+    width: "100%",
+    padding: "10px",
+  },
+  containerIconTema: {
+    display: "flex",
+    alignItems: "center",
+    px: 2,
+    mt: 1,
+    mb: 1,
+    justifyContent: "space-between",
+  },
+  img: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    borderRadius: "10px",
+  },
+  boxArrow: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "right",
+  },
+  boxListIten: {
+    minHeight: 48,
+    margin: "0 auto",
+    justifyContent: "initial",
+  },
+  boxIcon: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  listIcon: {
+    minWidth: 0,
+    justifyContent: "center",
+    mr: 3,
   },
 });
 

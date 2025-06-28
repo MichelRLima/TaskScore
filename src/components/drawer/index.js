@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -111,7 +110,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer(props) {
   const {
-    bodyComponent = <>teste</>,
+    bodyComponent = <></>,
     setColorMode,
     handleDownload,
     triggerFileInput,
@@ -120,7 +119,10 @@ export default function MiniDrawer(props) {
   } = props;
   const navigate = useNavigate();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const styles = useStyles(theme);
+  const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     const pageName = window.location.pathname;
     pages?.map((page, index) => {
@@ -129,13 +131,6 @@ export default function MiniDrawer(props) {
       }
     });
   }, [window.location.pathname]);
-
-  const styles = useStyles(theme);
-  const [open, setOpen] = useState(false);
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const toggleDrawer = (newOpen) => () => {
-    setOpenDrawer(newOpen);
-  };
 
   const buttons = [
     <Button
@@ -198,23 +193,7 @@ export default function MiniDrawer(props) {
               <MenuIcon />
             </IconButton>
           ) : (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={() => {
-                setOpenDrawer(true);
-              }}
-              edge="start"
-              sx={[
-                {
-                  marginRight: 2,
-                  zIndex: 2,
-                },
-                open && { display: "none" },
-              ]}
-            >
-              <MenuIcon />
-            </IconButton>
+            <></>
           )}
 
           <Box sx={styles.containerImg}>
